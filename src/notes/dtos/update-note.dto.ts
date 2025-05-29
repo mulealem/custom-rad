@@ -9,4 +9,8 @@ export class UpdateNoteDto {
   @IsString()
   @IsOptional()
   content?: string;
+
+  @IsString()
+  @IsOptional()
+  metadata?: string;
 }

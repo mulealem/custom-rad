@@ -1,4 +1,4 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsString, MinLength, IsOptional } from 'class-validator';
 
 export class CreateNoteDto {
   @IsString()
@@ -7,4 +7,12 @@ export class CreateNoteDto {
 
   @IsString()
   content: string;
+
+  @IsString()
+  @MinLength(10)
+  referenceId: string;
+
+  @IsString()
+  @IsOptional()
+  metadata?: string;
 }
