@@ -11,56 +11,57 @@ export declare class NotesController {
     constructor(notesService: NotesService);
     create(createNoteDto: CreateNoteDto, req: RequestWithUser): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(req: RequestWithUser): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }[]>;
     findOne(id: string, req: RequestWithUser): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     } | null>;
     update(id: string, updateNoteDto: UpdateNoteDto, req: RequestWithUser): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     remove(id: string, req: RequestWithUser): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     searchExternal(query: any): any;
     getNoteByReferenceId(referenceId: string): any;
     getOrthancStudyById(studyId: string): any;
+    uploadZipToOrthanc(request: Request): Promise<any>;
 }
 export {};

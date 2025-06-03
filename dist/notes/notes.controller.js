@@ -18,6 +18,7 @@ const notes_service_1 = require("./notes.service");
 const create_note_dto_1 = require("./dtos/create-note.dto");
 const update_note_dto_1 = require("./dtos/update-note.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const inspector_1 = require("inspector");
 let NotesController = class NotesController {
     notesService;
     constructor(notesService) {
@@ -30,7 +31,7 @@ let NotesController = class NotesController {
         return this.notesService.findAll(req.user.userId);
     }
     findOne(id, req) {
-        console.log('Finding note with id:', id);
+        inspector_1.console.log('Finding note with id:', id);
         return this.notesService.findOne(Number(id));
     }
     update(id, updateNoteDto, req) {
@@ -40,7 +41,7 @@ let NotesController = class NotesController {
         return this.notesService.remove(Number(id), req.user.userId);
     }
     searchExternal(query) {
-        console.log('Searching external API with Orthanc');
+        inspector_1.console.log('Searching external API with Orthanc');
         return this.notesService.queryExternalApiWithOrthanc(query);
     }
     getNoteByReferenceId(referenceId) {
@@ -48,6 +49,27 @@ let NotesController = class NotesController {
     }
     getOrthancStudyById(studyId) {
         return this.notesService.getOrthanicStudyByID(studyId);
+    }
+    async uploadZipToOrthanc(request) {
+        try {
+            if (request.headers['content-type'] !== 'application/zip') {
+                inspector_1.console.error('Invalid content type:', request.headers['content-type']);
+                return Promise.reject(new common_1.HttpException('Invalid content type, expected application/zip', common_1.HttpStatus.BAD_REQUEST));
+            }
+            const chunks = [];
+            for await (const chunk of request) {
+                chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+            }
+            const fileBuffer = Buffer.concat(chunks);
+            return this.notesService.uploadOrthancStudy(fileBuffer);
+        }
+        catch (error) {
+            if (error instanceof common_1.HttpException) {
+                throw error;
+            }
+            throw new common_1.HttpException(error.response?.data?.message ||
+                'Failed to forward file to external service', error.response?.status || common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 };
 exports.NotesController = NotesController;
@@ -114,6 +136,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Object)
 ], NotesController.prototype, "getOrthancStudyById", null);
+__decorate([
+    (0, common_1.Post)('orthanc/upload'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], NotesController.prototype, "uploadZipToOrthanc", null);
 exports.NotesController = NotesController = __decorate([
     (0, common_1.Controller)('notes'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

@@ -11,11 +11,15 @@ import {
   UsePipes,
   ValidationPipe,
   Query,
+  Req,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { NotesService, ExternalApiResponse } from './notes.service';
 import { CreateNoteDto } from './dtos/create-note.dto';
 import { UpdateNoteDto } from './dtos/update-note.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { console } from 'inspector';
 
 interface RequestWithUser extends Request {
   user: { userId: number };
@@ -76,5 +80,61 @@ export class NotesController {
   @Get('orthanc/studies/:studyId')
   getOrthancStudyById(@Param('studyId') studyId: string): any {
     return this.notesService.getOrthanicStudyByID(studyId);
+  }
+
+  // Upload zip file to Orthanc
+  @Post('orthanc/upload')
+  async uploadZipToOrthanc(@Req() request: Request): Promise<any> {
+    // console.log('Uploading zip file to Orthanc:', zipFile);
+    // return this.notesService.uploadOrthanicStudy(zipFile);
+    try {
+      // Ensure the request has the correct Content-Type
+      if (request.headers['content-type'] !== 'application/zip') {
+        console.error('Invalid content type:', request.headers['content-type']);
+        return Promise.reject(
+          new HttpException(
+            'Invalid content type, expected application/zip',
+            HttpStatus.BAD_REQUEST,
+          ),
+        );
+      }
+
+      // Collect the raw buffer data from the incoming request
+      const chunks: Buffer[] = [];
+      for await (const chunk of request) {
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      }
+      const fileBuffer = Buffer.concat(chunks);
+
+      return this.notesService.uploadOrthancStudy(fileBuffer);
+
+      // // Configure the external endpoint request
+      // const externalEndpoint = 'http://external-service:8080/upload'; // Replace with actual endpoint
+      // const config = {
+      //   method: 'post',
+      //   url: externalEndpoint,
+      //   headers: {
+      //     'Content-Type': 'application/zip',
+      //   },
+      //   data: fileBuffer,
+      //   maxBodyLength: Infinity,
+      // };
+
+      // // Forward the file to the external endpoint
+      // const response = await axios.request(config);
+
+      // Return the external service's response
+      // return response.data;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      // Handle axios or other errors
+      throw new HttpException(
+        error.response?.data?.message ||
+          'Failed to forward file to external service',
+        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

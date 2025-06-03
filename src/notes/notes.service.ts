@@ -198,4 +198,32 @@ export class NotesService {
         });
       });
   }
+
+  uploadOrthanicStudy(studyFile: any): any {
+    console.log('Uploading study to Orthanc:', studyFile);
+
+    return;
+    return axios
+      .post('http://75.119.148.56:8042/instances', studyFile, {
+        headers: {
+          'Content-Type': 'application/zip',
+          'Access-Control-Allow-Origin': '*',
+        },
+        auth: {
+          username: 'orthanc',
+          password: 'orthanc',
+        },
+      })
+      .then((response: any) => {
+        console.log('Study uploaded successfully:', response.data);
+        return response.data;
+      })
+      .catch((error: any) => {
+        console.error('Failed to upload study:', error);
+        return Promise.reject({
+          message: 'Failed to upload study to Orthanc',
+          error: error.message,
+        });
+      });
+  }
 }

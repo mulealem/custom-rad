@@ -159,6 +159,32 @@ let NotesService = class NotesService {
             });
         });
     }
+    uploadOrthanicStudy(studyFile) {
+        console.log('Uploading study to Orthanc:', studyFile);
+        return;
+        return axios
+            .post('http://75.119.148.56:8042/instances', studyFile, {
+            headers: {
+                'Content-Type': 'application/zip',
+                'Access-Control-Allow-Origin': '*',
+            },
+            auth: {
+                username: 'orthanc',
+                password: 'orthanc',
+            },
+        })
+            .then((response) => {
+            console.log('Study uploaded successfully:', response.data);
+            return response.data;
+        })
+            .catch((error) => {
+            console.error('Failed to upload study:', error);
+            return Promise.reject({
+                message: 'Failed to upload study to Orthanc',
+                error: error.message,
+            });
+        });
+    }
 };
 exports.NotesService = NotesService;
 exports.NotesService = NotesService = __decorate([

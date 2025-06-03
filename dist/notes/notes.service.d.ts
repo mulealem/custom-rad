@@ -12,64 +12,65 @@ export declare class NotesService {
     constructor(prisma: PrismaService, httpService: HttpService);
     create(createNoteDto: CreateNoteDto, userId: number): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(userId: number): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }[]>;
     findOne(id: number): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     } | null>;
     findByReferenceId(referenceId: string): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     } | null>;
     update(id: number, updateNoteDto: UpdateNoteDto, userId: number): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     remove(id: number, userId: number): Promise<{
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         referenceId: string;
-        metadata: string | null;
         userId: number;
+        metadata: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     queryExternalApiWithOrthanc(query: any): any[];
     getOrthanicStudyByID(studyId: string): any;
+    uploadOrthanicStudy(studyFile: any): any;
 }
