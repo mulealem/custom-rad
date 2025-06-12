@@ -50,25 +50,22 @@ let NotesController = class NotesController {
     getOrthancStudyById(studyId) {
         return this.notesService.getOrthanicStudyByID(studyId);
     }
-    async uploadZipToOrthanc(request) {
+    handleFileUpload(fileBuffer) {
+        inspector_1.console.log('Received file buffer for upload:', fileBuffer);
         try {
-            if (request.headers['content-type'] !== 'application/zip') {
-                inspector_1.console.error('Invalid content type:', request.headers['content-type']);
-                return Promise.reject(new common_1.HttpException('Invalid content type, expected application/zip', common_1.HttpStatus.BAD_REQUEST));
+            if (!Buffer.isBuffer(fileBuffer)) {
+                inspector_1.console.error('Invalid file data received:', fileBuffer);
+                return Promise.resolve();
             }
-            const chunks = [];
-            for await (const chunk of request) {
-                chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-            }
-            const fileBuffer = Buffer.concat(chunks);
-            return this.notesService.uploadOrthancStudy(fileBuffer);
+            inspector_1.console.log('Received file buffer for upload:', fileBuffer.length, 'bytes');
+            return Promise.resolve();
         }
         catch (error) {
+            inspector_1.console.error('Error during file upload:', error);
             if (error instanceof common_1.HttpException) {
                 throw error;
             }
-            throw new common_1.HttpException(error.response?.data?.message ||
-                'Failed to forward file to external service', error.response?.status || common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+            return Promise.reject();
         }
     }
 };
@@ -138,11 +135,11 @@ __decorate([
 ], NotesController.prototype, "getOrthancStudyById", null);
 __decorate([
     (0, common_1.Post)('orthanc/upload'),
-    __param(0, (0, common_1.Req)()),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], NotesController.prototype, "uploadZipToOrthanc", null);
+    __metadata("design:paramtypes", [Buffer]),
+    __metadata("design:returntype", Object)
+], NotesController.prototype, "handleFileUpload", null);
 exports.NotesController = NotesController = __decorate([
     (0, common_1.Controller)('notes'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

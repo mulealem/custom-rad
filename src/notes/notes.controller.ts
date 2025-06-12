@@ -84,31 +84,23 @@ export class NotesController {
 
   // Upload zip file to Orthanc
   @Post('orthanc/upload')
-  async uploadZipToOrthanc(@Req() request: Request): Promise<any> {
-    // console.log('Uploading zip file to Orthanc:', zipFile);
-    // return this.notesService.uploadOrthanicStudy(zipFile);
+  handleFileUpload(@Body() fileBuffer: Buffer): any {
+    console.log('Received file buffer for upload:', fileBuffer);
     try {
-      // Ensure the request has the correct Content-Type
-      if (request.headers['content-type'] !== 'application/zip') {
-        console.error('Invalid content type:', request.headers['content-type']);
-        return Promise.reject(
-          new HttpException(
-            'Invalid content type, expected application/zip',
-            HttpStatus.BAD_REQUEST,
-          ),
-        );
+      // Ensure the fileBuffer is a valid Buffer
+      if (!Buffer.isBuffer(fileBuffer)) {
+        console.error('Invalid file data received:', fileBuffer);
+        // throw new HttpException('Invalid file data. Expected a ZIP file buffer.', HttpStatus.BAD_REQUEST);
+        return Promise.resolve();
       }
 
-      // Collect the raw buffer data from the incoming request
-      const chunks: Buffer[] = [];
-      for await (const chunk of request) {
-        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-      }
-      const fileBuffer = Buffer.concat(chunks);
+      console.log(
+        'Received file buffer for upload:',
+        fileBuffer.length,
+        'bytes',
+      );
 
-      return this.notesService.uploadOrthancStudy(fileBuffer);
-
-      // // Configure the external endpoint request
+      // Configure the external endpoint request
       // const externalEndpoint = 'http://external-service:8080/upload'; // Replace with actual endpoint
       // const config = {
       //   method: 'post',
@@ -124,17 +116,73 @@ export class NotesController {
       // const response = await axios.request(config);
 
       // Return the external service's response
-      // return response.data;
+      return Promise.resolve();
     } catch (error) {
+      console.error('Error during file upload:', error);
       if (error instanceof HttpException) {
         throw error;
       }
       // Handle axios or other errors
-      throw new HttpException(
-        error.response?.data?.message ||
-          'Failed to forward file to external service',
-        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      // throw new HttpException(
+      //   error.response?.data?.message || 'Failed to forward file to external service',
+      //   error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      // );
+      return Promise.reject();
     }
   }
+  // async uploadZipToOrthanc(@Req() request: Request): Promise<any> {
+  //   // console.log('Uploading zip file to Orthanc:', zipFile);
+  //   // return this.notesService.uploadOrthanicStudy(zipFile);
+  //   try {
+  //     // Ensure the request has the correct Content-Type
+  //     if (request.headers['content-type'] !== 'application/zip') {
+  //       console.error('Invalid content type:', request.headers['content-type']);
+  //       return Promise.reject(
+  //         new HttpException(
+  //           'Invalid content type, expected application/zip',
+  //           HttpStatus.BAD_REQUEST,
+  //         ),
+  //       );
+  //     }
+
+  //     // Collect the raw buffer data from the incoming request
+  //     const chunks: Buffer[] = [];
+  //     for await (const chunk of request) {
+  //       chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  //     }
+  //     const fileBuffer = Buffer.concat(chunks);
+
+  //     return null;
+
+  //     // return this.notesService.uploadOrthancStudy(fileBuffer);
+
+  //     // // Configure the external endpoint request
+  //     // const externalEndpoint = 'http://external-service:8080/upload'; // Replace with actual endpoint
+  //     // const config = {
+  //     //   method: 'post',
+  //     //   url: externalEndpoint,
+  //     //   headers: {
+  //     //     'Content-Type': 'application/zip',
+  //     //   },
+  //     //   data: fileBuffer,
+  //     //   maxBodyLength: Infinity,
+  //     // };
+
+  //     // // Forward the file to the external endpoint
+  //     // const response = await axios.request(config);
+
+  //     // Return the external service's response
+  //     // return response.data;
+  //   } catch (error) {
+  //     if (error instanceof HttpException) {
+  //       throw error;
+  //     }
+  //     // Handle axios or other errors
+  //     throw new HttpException(
+  //       error.response?.data?.message ||
+  //         'Failed to forward file to external service',
+  //       error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
+  //     );
+  //   }
+  // }
 }
