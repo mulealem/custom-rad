@@ -14,6 +14,13 @@ const app_service_1 = require("./app.service");
 const tags_module_1 = require("./tags/tags.module");
 const auth_module_1 = require("./auth/auth.module");
 const notes_module_1 = require("./notes/notes.module");
+const user_role_module_1 = require("./user-role/user-role.module");
+const patient_module_1 = require("./patient/patient.module");
+const study_module_1 = require("./study/study.module");
+const department_module_1 = require("./department/department.module");
+const category_module_1 = require("./category/category.module");
+const template_module_1 = require("./template/template.module");
+const institution_module_1 = require("./institution/institution.module");
 const configuration_1 = require("./config/configuration");
 let AppModule = class AppModule {
 };
@@ -28,6 +35,13 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             notes_module_1.NotesModule,
             tags_module_1.TagsModule,
+            user_role_module_1.UserRoleModule,
+            patient_module_1.PatientModule,
+            study_module_1.StudyModule,
+            department_module_1.DepartmentModule,
+            category_module_1.CategoryModule,
+            template_module_1.TemplateModule,
+            institution_module_1.InstitutionModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

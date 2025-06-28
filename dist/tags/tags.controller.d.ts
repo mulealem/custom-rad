@@ -15,4 +15,22 @@ export declare class TagsController {
         createdAt: Date;
         updatedAt: Date;
     }[]>;
+    findOne(id: string): Promise<{
+        name: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+    } | null>;
+    update(id: string, updateTagDto: CreateTagDto): Promise<{
+        name: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
+    delete(id: string): Promise<{
+        name: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
 }

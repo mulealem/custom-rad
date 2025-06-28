@@ -11,12 +11,19 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  notes     Note[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  password    String
+  notes       Note[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  UserRole    UserRole[]
+  Patient     Patient[]
+  Study       Study[]
+  Department  Department[]
+  Category    Category[]
+  Template    Template[]
+  Institution Institution[]
 }
 
 model Note {
@@ -39,3 +46,108 @@ model Tag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model UserRole {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  role      String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Patient {
+  id          Int       @id @default(autoincrement())
+  name        String?
+  dateOfBirth DateTime?
+  gender      String?
+  createdById Int?
+  createdBy   User?     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Study {
+  id                         Int          @id @default(autoincrement())
+  studyId                    String?      @unique
+  studyDIACOMReferenceObject String?
+  patientId                  Int?
+  modality                   String?
+  referringPhysicianId       Int?
+  assignedDoctorId           Int?
+  status                     String?
+  content                    String?
+  institutionId              Int?
+  institution                Institution? @relation(fields: [institutionId], references: [id])
+  uploadedById               Int?
+  uploadedBy                 User?        @relation(fields: [uploadedById], references: [id])
+  createdAt                  DateTime     @default(now())
+  updatedAt                  DateTime     @updatedAt
+  StudyTag                   StudyTag[]
+}
+
+model StudyTag {
+  id        Int      @id @default(autoincrement())
+  tag       String
+  studyId   Int
+  study     Study    @relation(fields: [studyId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Department {
+  id           Int        @id @default(autoincrement())
+  title        String
+  abbreviation String?
+  description  String?
+  createdById  Int?
+  createdBy    User?      @relation(fields: [createdById], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  Category     Category[]
+}
+
+model Category {
+  id           Int        @id @default(autoincrement())
+  title        String
+  abbreviation String?
+  departmentId Int
+  department   Department @relation(fields: [departmentId], references: [id])
+  createdById  Int?
+  createdBy    User?      @relation(fields: [createdById], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  Template     Template[]
+}
+
+model Template {
+  id          Int      @id @default(autoincrement())
+  title       String
+  ordinal     Int      @default(0)
+  content     String
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdById Int?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Institution {
+  id           Int      @id @default(autoincrement())
+  title        String?
+  abbreviation String?
+  createdById  Int?
+  createdBy    User?    @relation(fields: [createdById], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Study        Study[]
+}
+
+// nest g resource userRole --no-spec
+// nest g resource patient --no-spec
+// nest g resource study --no-spec
+// nest g resource department --no-spec
+// nest g resource category --no-spec
+// nest g resource template --no-spec
+// nest g resource institution --no-spec

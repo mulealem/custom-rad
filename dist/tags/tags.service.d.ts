@@ -15,4 +15,22 @@ export declare class TagsService {
         createdAt: Date;
         updatedAt: Date;
     }[]>;
+    findOne(id: number): Promise<{
+        name: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+    } | null>;
+    update(id: number, updateTagDto: CreateTagDto): Promise<{
+        name: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
+    delete(id: number): Promise<{
+        name: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
 }

@@ -25,6 +25,22 @@ let TagsService = class TagsService {
     async findAll() {
         return this.prisma.tag.findMany();
     }
+    async findOne(id) {
+        return this.prisma.tag.findUnique({
+            where: { id },
+        });
+    }
+    async update(id, updateTagDto) {
+        return this.prisma.tag.update({
+            where: { id },
+            data: updateTagDto,
+        });
+    }
+    async delete(id) {
+        return this.prisma.tag.delete({
+            where: { id },
+        });
+    }
 };
 exports.TagsService = TagsService;
 exports.TagsService = TagsService = __decorate([
