@@ -12,6 +12,8 @@ import { DepartmentModule } from './department/department.module';
 import { CategoryModule } from './category/category.module';
 import { TemplateModule } from './template/template.module';
 import { InstitutionModule } from './institution/institution.module';
+import { OrthancModule } from './orthanc/orthanc.module';
+import { HelpersService } from './helpers/helpers.service';
 import configuration from './config/configuration';
 
 @Module({
@@ -30,8 +32,9 @@ import configuration from './config/configuration';
     CategoryModule,
     TemplateModule,
     InstitutionModule,
+    OrthancModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, HelpersService],
 })
 export class AppModule {}

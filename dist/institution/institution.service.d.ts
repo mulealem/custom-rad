@@ -11,6 +11,7 @@ export declare class InstitutionService {
         title: string | null;
         createdById: number | null;
         abbreviation: string | null;
+        slung: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<{
         id: number;
@@ -19,6 +20,7 @@ export declare class InstitutionService {
         title: string | null;
         createdById: number | null;
         abbreviation: string | null;
+        slung: string;
     }[]>;
     findOne(id: number): import(".prisma/client").Prisma.Prisma__InstitutionClient<{
         id: number;
@@ -27,6 +29,7 @@ export declare class InstitutionService {
         title: string | null;
         createdById: number | null;
         abbreviation: string | null;
+        slung: string;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(id: number, updateInstitutionDto: UpdateInstitutionDto): import(".prisma/client").Prisma.Prisma__InstitutionClient<{
         id: number;
@@ -35,6 +38,7 @@ export declare class InstitutionService {
         title: string | null;
         createdById: number | null;
         abbreviation: string | null;
+        slung: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     remove(id: number): import(".prisma/client").Prisma.Prisma__InstitutionClient<{
         id: number;
@@ -43,5 +47,6 @@ export declare class InstitutionService {
         title: string | null;
         createdById: number | null;
         abbreviation: string | null;
+        slung: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
 }

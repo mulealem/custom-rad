@@ -21,6 +21,8 @@ const department_module_1 = require("./department/department.module");
 const category_module_1 = require("./category/category.module");
 const template_module_1 = require("./template/template.module");
 const institution_module_1 = require("./institution/institution.module");
+const orthanc_module_1 = require("./orthanc/orthanc.module");
+const helpers_service_1 = require("./helpers/helpers.service");
 const configuration_1 = require("./config/configuration");
 let AppModule = class AppModule {
 };
@@ -42,9 +44,10 @@ exports.AppModule = AppModule = __decorate([
             category_module_1.CategoryModule,
             template_module_1.TemplateModule,
             institution_module_1.InstitutionModule,
+            orthanc_module_1.OrthancModule,
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [app_service_1.AppService, helpers_service_1.HelpersService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

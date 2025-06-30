@@ -65,6 +65,7 @@ model Patient {
   createdBy   User?     @relation(fields: [createdById], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  Study       Study[]
 }
 
 model Study {
@@ -72,6 +73,7 @@ model Study {
   studyId                    String?      @unique
   studyDIACOMReferenceObject String?
   patientId                  Int?
+  patient                    Patient?     @relation(fields: [patientId], references: [id])
   modality                   String?
   referringPhysicianId       Int?
   assignedDoctorId           Int?
@@ -136,6 +138,7 @@ model Template {
 model Institution {
   id           Int      @id @default(autoincrement())
   title        String?
+  slung        String   @unique @default(cuid())
   abbreviation String?
   createdById  Int?
   createdBy    User?    @relation(fields: [createdById], references: [id])
