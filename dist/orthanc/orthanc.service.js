@@ -13,6 +13,8 @@ exports.OrthancService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
 const axios_1 = require("axios");
+const path_1 = require("path");
+const fs_1 = require("fs");
 let OrthancService = class OrthancService {
     prisma;
     constructor(prisma) {
@@ -67,13 +69,13 @@ let OrthancService = class OrthancService {
                             .then(async (instanceTagsResponse) => {
                             console.log(`'/instances/${instanceId}'`, instanceTagsResponse.data);
                             const studyExists = await this.prisma.study.findUnique({
-                                where: { studyId: studyId },
+                                where: { studyId: seriesInstanceUID },
                             });
                             if (!studyExists) {
                                 await this.prisma.study
                                     .create({
                                     data: {
-                                        studyId: studyId,
+                                        studyId: seriesInstanceUID,
                                         status: 'pending',
                                         studyDIACOMReferenceObject: JSON.stringify({
                                             seriesResponse: seriesResponse.data,
@@ -213,8 +215,23 @@ let OrthancService = class OrthancService {
             study,
         };
     }
-    upload(data) {
-        console.log('Uploading data to Orthanc:', data);
+    upload(file) {
+        const uploadPath = (0, path_1.join)(__dirname, '..', '..', 'uploads', file.originalname);
+        if (file.buffer) {
+            const writeStream = (0, fs_1.createWriteStream)(uploadPath);
+            writeStream.write(file.buffer);
+            writeStream.end();
+        }
+        else if (file.path) {
+        }
+        else {
+            throw new Error('File buffer and path are both undefined');
+        }
+        return {
+            filename: file.originalname,
+            path: uploadPath,
+            message: 'File uploaded successfully',
+        };
     }
 };
 exports.OrthancService = OrthancService;

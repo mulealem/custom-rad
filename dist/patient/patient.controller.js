@@ -75,7 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PatientController.prototype, "remove", null);
 exports.PatientController = PatientController = __decorate([
-    (0, common_1.Controller)('patient'),
+    (0, common_1.Controller)('patients'),
     __metadata("design:paramtypes", [patient_service_1.PatientService])
 ], PatientController);
 //# sourceMappingURL=patient.controller.js.map

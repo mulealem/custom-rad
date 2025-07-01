@@ -11,4 +11,23 @@ export declare class AuthController {
     login(loginDto: LoginDto): Promise<{
         access_token: string;
     }>;
+    updatePassword(updatePasswordDto: {
+        userId: number;
+        currentPassword: string;
+        newPassword: string;
+    }): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        email: string;
+        password: string;
+    }>;
+    me(user: {
+        id: number;
+    }): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        email: string;
+    }>;
 }

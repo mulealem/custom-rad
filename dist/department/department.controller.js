@@ -75,7 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], DepartmentController.prototype, "remove", null);
 exports.DepartmentController = DepartmentController = __decorate([
-    (0, common_1.Controller)('department'),
+    (0, common_1.Controller)('departments'),
     __metadata("design:paramtypes", [department_service_1.DepartmentService])
 ], DepartmentController);
 //# sourceMappingURL=department.controller.js.map

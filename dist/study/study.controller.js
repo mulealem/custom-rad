@@ -25,6 +25,9 @@ let StudyController = class StudyController {
     create(createStudyDto) {
         return this.studyService.create(createStudyDto);
     }
+    search(query) {
+        return this.studyService.search(query);
+    }
     findAll() {
         return this.studyService.findAll();
     }
@@ -46,6 +49,13 @@ __decorate([
     __metadata("design:paramtypes", [create_study_dto_1.CreateStudyDto]),
     __metadata("design:returntype", void 0)
 ], StudyController.prototype, "create", null);
+__decorate([
+    (0, common_1.Post)('/search'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], StudyController.prototype, "search", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
@@ -75,7 +85,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], StudyController.prototype, "remove", null);
 exports.StudyController = StudyController = __decorate([
-    (0, common_1.Controller)('study'),
+    (0, common_1.Controller)('studies'),
     __metadata("design:paramtypes", [study_service_1.StudyService])
 ], StudyController);
 //# sourceMappingURL=study.controller.js.map

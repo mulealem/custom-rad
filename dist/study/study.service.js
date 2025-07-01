@@ -20,11 +20,45 @@ let StudyService = class StudyService {
     create(createStudyDto) {
         return this.prisma.study.create({ data: createStudyDto });
     }
+    search(query) {
+        return this.prisma.study.findMany({
+            where: {
+                AND: [
+                    query.ids ? { id: { in: query.ids } } : {},
+                    query.patientIds ? { patientId: { in: query.patientIds } } : {},
+                    query.institutionIds
+                        ? { institutionId: { in: query.institutionIds } }
+                        : {},
+                    query.createdStartDate
+                        ? { createdAt: { gte: new Date(query.createdStartDate) } }
+                        : {},
+                    query.createdEndDate
+                        ? { createdAt: { lte: new Date(query.createdEndDate) } }
+                        : {},
+                ],
+            },
+            include: {
+                patient: true,
+                institution: true,
+            },
+        });
+    }
     findAll() {
-        return this.prisma.study.findMany();
+        return this.prisma.study.findMany({
+            include: {
+                patient: true,
+                institution: true,
+            },
+        });
     }
     findOne(id) {
-        return this.prisma.study.findUnique({ where: { id } });
+        return this.prisma.study.findUnique({
+            where: { id },
+            include: {
+                patient: true,
+                institution: true,
+            },
+        });
     }
     update(id, updateStudyDto) {
         return this.prisma.study.update({

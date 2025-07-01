@@ -43,6 +43,34 @@ let AuthService = class AuthService {
             access_token: this.jwtService.sign(payload),
         };
     }
+    async updatePassword(userId, currentPassword, newPassword) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+        });
+        if (!user || !(await bcrypt.compare(currentPassword, user.password))) {
+            throw new common_1.UnauthorizedException('Invalid credentials');
+        }
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        return this.prisma.user.update({
+            where: { id: userId },
+            data: { password: hashedPassword },
+        });
+    }
+    async me(userId) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                email: true,
+                createdAt: true,
+                updatedAt: true,
+            },
+        });
+        if (!user) {
+            throw new common_1.UnauthorizedException('User not found');
+        }
+        return user;
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([

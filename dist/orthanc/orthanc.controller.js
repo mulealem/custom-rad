@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const orthanc_service_1 = require("./orthanc.service");
 const fs_1 = require("fs");
 const path_1 = require("path");
+const platform_express_1 = require("@nestjs/platform-express");
 let OrthancController = class OrthancController {
     orthancService;
     constructor(orthancService) {
@@ -42,6 +43,13 @@ let OrthancController = class OrthancController {
             }
         });
     }
+    uploadFile(file) {
+        if (!file) {
+            throw new Error('File not provided');
+        }
+        console.log('Received file upload request');
+        return this.orthancService.upload(file);
+    }
 };
 exports.OrthancController = OrthancController;
 __decorate([
@@ -65,6 +73,14 @@ __decorate([
     __metadata("design:paramtypes", [Request]),
     __metadata("design:returntype", Promise)
 ], OrthancController.prototype, "uploadBinary", null);
+__decorate([
+    (0, common_1.Post)('multer'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], OrthancController.prototype, "uploadFile", null);
 exports.OrthancController = OrthancController = __decorate([
     (0, common_1.Controller)('orthanc'),
     __metadata("design:paramtypes", [orthanc_service_1.OrthancService])

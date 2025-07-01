@@ -1,8 +1,16 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Req,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { OrthancService } from './orthanc.service';
 
 import { createWriteStream } from 'fs';
 import { join } from 'path';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('orthanc')
 export class OrthancController {
@@ -35,4 +43,32 @@ export class OrthancController {
       }
     });
   }
+
+  @Post('multer')
+  @UseInterceptors(FileInterceptor('file'))
+  // @ApiConsumes('multipart/form-data')
+  // @ApiBody({
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       file: { type: 'string', format: 'binary' },
+  //     },
+  //   },
+  // })
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      throw new Error('File not provided');
+    }
+
+    console.log('Received file upload request');
+
+    return this.orthancService.upload(file);
+  }
 }
+
+// curl example:
+// curl -X POST http://localhost:3000/orthanc/upload -H "Content-Type: application/json" -d '{"key": "value"}'
+
+// multer
+// curl example:
+// curl -X POST http://localhost:3000/orthanc/multer -F "file=@/path/to/your/file.jpg"

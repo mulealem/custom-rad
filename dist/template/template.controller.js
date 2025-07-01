@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const template_service_1 = require("./template.service");
 const create_template_dto_1 = require("./dto/create-template.dto");
 const update_template_dto_1 = require("./dto/update-template.dto");
-const passport_1 = require("@nestjs/passport");
 let TemplateController = class TemplateController {
     templateService;
     constructor(templateService) {
@@ -76,8 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], TemplateController.prototype, "remove", null);
 exports.TemplateController = TemplateController = __decorate([
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
-    (0, common_1.Controller)('template'),
+    (0, common_1.Controller)('templates'),
     __metadata("design:paramtypes", [template_service_1.TemplateService])
 ], TemplateController);
 //# sourceMappingURL=template.controller.js.map

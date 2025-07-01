@@ -1,15 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { StudyService } from './study.service';
 import { CreateStudyDto } from './dto/create-study.dto';
 import { UpdateStudyDto } from './dto/update-study.dto';
 
-@Controller('study')
+@Controller('studies')
 export class StudyController {
   constructor(private readonly studyService: StudyService) {}
 
   @Post()
   create(@Body() createStudyDto: CreateStudyDto) {
     return this.studyService.create(createStudyDto);
+  }
+
+  @Post('/search')
+  search(@Body() query: any) {
+    return this.studyService.search(query);
   }
 
   @Get()

@@ -75,7 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], InstitutionController.prototype, "remove", null);
 exports.InstitutionController = InstitutionController = __decorate([
-    (0, common_1.Controller)('institution'),
+    (0, common_1.Controller)('institutions'),
     __metadata("design:paramtypes", [institution_service_1.InstitutionService])
 ], InstitutionController);
 //# sourceMappingURL=institution.controller.js.map

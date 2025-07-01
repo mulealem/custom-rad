@@ -15,7 +15,9 @@ export class TemplateService {
   }
 
   findOne(id: number) {
-    return this.prisma.template.findUnique({ where: { id } });
+    return this.prisma.template.findUnique({
+      where: { id },
+    });
   }
 
   update(id: number, updateTemplateDto: UpdateTemplateDto) {

@@ -75,7 +75,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "remove", null);
 exports.CategoryController = CategoryController = __decorate([
-    (0, common_1.Controller)('category'),
+    (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])
 ], CategoryController);
 //# sourceMappingURL=category.controller.js.map

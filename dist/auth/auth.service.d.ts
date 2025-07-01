@@ -13,4 +13,17 @@ export declare class AuthService {
     login(loginDto: LoginDto): Promise<{
         access_token: string;
     }>;
+    updatePassword(userId: number, currentPassword: string, newPassword: string): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        email: string;
+        password: string;
+    }>;
+    me(userId: number): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        email: string;
+    }>;
 }

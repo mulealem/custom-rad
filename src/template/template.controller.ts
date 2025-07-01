@@ -13,8 +13,8 @@ import { CreateTemplateDto } from './dto/create-template.dto';
 import { UpdateTemplateDto } from './dto/update-template.dto';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
-@Controller('template')
+// @UseGuards(AuthGuard('jwt'))
+@Controller('templates')
 export class TemplateController {
   constructor(private readonly templateService: TemplateService) {}
 

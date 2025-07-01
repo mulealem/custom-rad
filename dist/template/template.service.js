@@ -24,7 +24,9 @@ let TemplateService = class TemplateService {
         return this.prisma.template.findMany();
     }
     findOne(id) {
-        return this.prisma.template.findUnique({ where: { id } });
+        return this.prisma.template.findUnique({
+            where: { id },
+        });
     }
     update(id, updateTemplateDto) {
         return this.prisma.template.update({

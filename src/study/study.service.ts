@@ -10,12 +10,50 @@ export class StudyService {
     return this.prisma.study.create({ data: createStudyDto });
   }
 
+  search(query: any) {
+    // query can include ids, patientIds, institutionIds, name, description, createdStartDate, createdEndDate
+    // Example query: { ids: [1, 2, 3], patientIds: [4, 5], institutionIds: [6], name: 'Study Name', description: 'Study Description' }
+
+    return this.prisma.study.findMany({
+      where: {
+        AND: [
+          query.ids ? { id: { in: query.ids } } : {},
+          query.patientIds ? { patientId: { in: query.patientIds } } : {},
+          query.institutionIds
+            ? { institutionId: { in: query.institutionIds } }
+            : {},
+          query.createdStartDate
+            ? { createdAt: { gte: new Date(query.createdStartDate) } }
+            : {},
+          query.createdEndDate
+            ? { createdAt: { lte: new Date(query.createdEndDate) } }
+            : {},
+        ],
+      },
+      include: {
+        patient: true,
+        institution: true,
+      },
+    });
+  }
+
   findAll() {
-    return this.prisma.study.findMany();
+    return this.prisma.study.findMany({
+      include: {
+        patient: true,
+        institution: true,
+      },
+    });
   }
 
   findOne(id: number) {
-    return this.prisma.study.findUnique({ where: { id } });
+    return this.prisma.study.findUnique({
+      where: { id },
+      include: {
+        patient: true,
+        institution: true,
+      },
+    });
   }
 
   update(id: number, updateStudyDto: UpdateStudyDto) {

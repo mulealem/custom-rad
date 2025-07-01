@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import axios from 'axios';
+import { join } from 'path';
+import { createWriteStream } from 'fs';
 
 @Injectable()
 export class OrthancService {
@@ -144,14 +146,14 @@ export class OrthancService {
 
                           const studyExists =
                             await this.prisma.study.findUnique({
-                              where: { studyId: studyId },
+                              where: { studyId: seriesInstanceUID },
                             });
                           if (!studyExists) {
                             // Create the study if it doesn't exist
                             await this.prisma.study
                               .create({
                                 data: {
-                                  studyId: studyId,
+                                  studyId: seriesInstanceUID,
                                   status: 'pending',
                                   studyDIACOMReferenceObject: JSON.stringify({
                                     seriesResponse: seriesResponse.data,
@@ -430,8 +432,33 @@ export class OrthancService {
     };
   }
 
-  upload(data: any) {
-    console.log('Uploading data to Orthanc:', data);
+  upload(file: Express.Multer.File) {
+    // save the file to a specific directory
+    const uploadPath = join(
+      __dirname,
+      '..',
+      '..',
+      'uploads',
+      file.originalname,
+    );
+
+    if (file.buffer) {
+      // MemoryStorage: file.buffer is available
+      const writeStream = createWriteStream(uploadPath);
+      writeStream.write(file.buffer);
+      writeStream.end();
+    } else if (file.path) {
+      // DiskStorage: file.path is available, file already saved
+      // Optionally, you could move/rename the file if needed
+    } else {
+      throw new Error('File buffer and path are both undefined');
+    }
+
+    return {
+      filename: file.originalname,
+      path: uploadPath,
+      message: 'File uploaded successfully',
+    };
   }
 
   // getDicomInfo(seriesInstanceUID: any, orthancUrl = 'http://localhost:8042') {
