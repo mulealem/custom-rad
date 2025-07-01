@@ -178,14 +178,15 @@ let OrthancService = class OrthancService {
                 if (axios_1.default.isAxiosError(error)) {
                     console.error(`Error fetching series data: ${error.message}`);
                 }
-                throw new Error('Failed to fetch series data');
+                throw new Error(error);
             });
         })
             .catch((error) => {
             if (axios_1.default.isAxiosError(error)) {
+                console.error('Error querying Orthanc:', error);
                 throw new Error(`Failed to retrieve DICOM info: ${error.response?.data || error.message}`);
             }
-            throw new Error(`Failed to retrieve DICOM info: ${error.message}`);
+            throw new Error(error);
         }));
         return axios_1.default
             .post(`http://75.119.148.56:8042/tools/lookup`, study?.seriesInstanceUID)
@@ -211,6 +212,9 @@ let OrthancService = class OrthancService {
             message: 'Data extracted successfully',
             study,
         };
+    }
+    upload(data) {
+        console.log('Uploading data to Orthanc:', data);
     }
 };
 exports.OrthancService = OrthancService;

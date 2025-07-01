@@ -275,7 +275,7 @@ export class OrthancService {
               if (axios.isAxiosError(error)) {
                 console.error(`Error fetching series data: ${error.message}`);
               }
-              throw new Error('Failed to fetch series data');
+              throw new Error(error);
             });
         })
         // .then((seriesId) => {
@@ -394,11 +394,12 @@ export class OrthancService {
         // })
         .catch((error) => {
           if (axios.isAxiosError(error)) {
+            console.error('Error querying Orthanc:', error);
             throw new Error(
               `Failed to retrieve DICOM info: ${error.response?.data || error.message}`,
             );
           }
-          throw new Error(`Failed to retrieve DICOM info: ${error.message}`);
+          throw new Error(error);
         })
     );
 
@@ -427,6 +428,10 @@ export class OrthancService {
       message: 'Data extracted successfully',
       study,
     };
+  }
+
+  upload(data: any) {
+    console.log('Uploading data to Orthanc:', data);
   }
 
   // getDicomInfo(seriesInstanceUID: any, orthancUrl = 'http://localhost:8042') {

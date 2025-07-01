@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrthancController = void 0;
 const common_1 = require("@nestjs/common");
 const orthanc_service_1 = require("./orthanc.service");
+const fs_1 = require("fs");
+const path_1 = require("path");
 let OrthancController = class OrthancController {
     orthancService;
     constructor(orthancService) {
@@ -22,6 +24,23 @@ let OrthancController = class OrthancController {
     }
     extract(study) {
         return this.orthancService.extract(study);
+    }
+    upload(data) {
+        return this.orthancService.upload(data);
+    }
+    async uploadBinary(req) {
+        const fileName = `binary-${Date.now()}.bin`;
+        const filePath = (0, path_1.join)(__dirname, '..', '..', 'uploads', fileName);
+        const writeStream = (0, fs_1.createWriteStream)(filePath);
+        return new Promise((resolve, reject) => {
+            console.log('Received binary data upload request');
+            console.log('Uploading binary data to Orthanc:', fileName);
+            const content = req.body;
+            if (!content) {
+                console.error('No content received in the request body');
+                return reject(new Error('No content received'));
+            }
+        });
     }
 };
 exports.OrthancController = OrthancController;
@@ -32,6 +51,20 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], OrthancController.prototype, "extract", null);
+__decorate([
+    (0, common_1.Post)('upload'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], OrthancController.prototype, "upload", null);
+__decorate([
+    (0, common_1.Post)('binary'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Request]),
+    __metadata("design:returntype", Promise)
+], OrthancController.prototype, "uploadBinary", null);
 exports.OrthancController = OrthancController = __decorate([
     (0, common_1.Controller)('orthanc'),
     __metadata("design:paramtypes", [orthanc_service_1.OrthancService])

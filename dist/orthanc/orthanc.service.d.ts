@@ -6,4 +6,5 @@ export declare class OrthancService {
         message: string;
         study: any;
     };
+    upload(data: any): void;
 }

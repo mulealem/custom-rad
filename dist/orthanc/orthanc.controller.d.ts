@@ -6,4 +6,6 @@ export declare class OrthancController {
         message: string;
         study: any;
     };
+    upload(data: any): void;
+    uploadBinary(req: Request): Promise<unknown>;
 }

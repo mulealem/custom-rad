@@ -1,8 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { TemplateService } from './template.service';
 import { CreateTemplateDto } from './dto/create-template.dto';
 import { UpdateTemplateDto } from './dto/update-template.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('template')
 export class TemplateController {
   constructor(private readonly templateService: TemplateService) {}
@@ -23,7 +34,10 @@ export class TemplateController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTemplateDto: UpdateTemplateDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTemplateDto: UpdateTemplateDto,
+  ) {
     return this.templateService.update(+id, updateTemplateDto);
   }
 
