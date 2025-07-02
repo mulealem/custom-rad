@@ -10,25 +10,26 @@ import { extname } from 'path';
 @Module({
   imports: [
     MulterModule.register({
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          callback(null, uniqueSuffix + extname(file.originalname));
-        },
-      }),
+      // storage: diskStorage({
+      //   destination: './uploadds',
+      //   filename: (req, file, callback) => {
+      //     const uniqueSuffix =
+      //       Date.now() + '-' + Math.round(Math.random() * 1e9);
+      //     callback(null, uniqueSuffix + extname(file.originalname));
+      //   },
+      // }),
       fileFilter: (req, file, callback) => {
         const allowedTypes = [
           'image/jpeg',
           'image/png',
           'application/pdf',
           'application/zip',
+          'application/x-zip-compressed',
         ];
         if (allowedTypes.includes(file.mimetype)) {
           callback(null, true);
         } else {
-          callback(new Error('Invalid file type'), false);
+          callback(new Error('Invalid file type: ' + file.mimetype), false);
         }
       },
       limits: {

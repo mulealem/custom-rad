@@ -6,15 +6,15 @@ export declare class OrthancController {
         message: string;
         study: any;
     };
-    upload(data: any): {
+    upload(data: any): Promise<{
         filename: string;
         path: string;
         message: string;
-    };
+    }>;
     uploadBinary(req: Request): Promise<unknown>;
-    uploadFile(file: Express.Multer.File): {
+    uploadFile(file: Express.Multer.File): Promise<{
         filename: string;
         path: string;
         message: string;
-    };
+    }>;
 }

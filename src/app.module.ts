@@ -14,6 +14,9 @@ import { TemplateModule } from './template/template.module';
 import { InstitutionModule } from './institution/institution.module';
 import { OrthancModule } from './orthanc/orthanc.module';
 import { HelpersService } from './helpers/helpers.service';
+import { StudyRemarkModule } from './study-remark/study-remark.module';
+import { StudyAttachmentModule } from './study-attachment/study-attachment.module';
+import { PdfModule } from './pdf/pdf.module';
 import configuration from './config/configuration';
 
 @Module({
@@ -33,6 +36,9 @@ import configuration from './config/configuration';
     TemplateModule,
     InstitutionModule,
     OrthancModule,
+    StudyRemarkModule,
+    StudyAttachmentModule,
+    PdfModule,
   ],
   controllers: [AppController],
   providers: [AppService, HelpersService],

@@ -6,9 +6,9 @@ export declare class OrthancService {
         message: string;
         study: any;
     };
-    upload(file: Express.Multer.File): {
+    upload(file: Express.Multer.File): Promise<{
         filename: string;
         path: string;
         message: string;
-    };
+    }>;
 }

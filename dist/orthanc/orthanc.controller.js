@@ -43,12 +43,11 @@ let OrthancController = class OrthancController {
             }
         });
     }
-    uploadFile(file) {
+    async uploadFile(file) {
         if (!file) {
             throw new Error('File not provided');
         }
-        console.log('Received file upload request');
-        return this.orthancService.upload(file);
+        return await this.orthancService.upload(file);
     }
 };
 exports.OrthancController = OrthancController;
@@ -79,7 +78,7 @@ __decorate([
     __param(0, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], OrthancController.prototype, "uploadFile", null);
 exports.OrthancController = OrthancController = __decorate([
     (0, common_1.Controller)('orthanc'),

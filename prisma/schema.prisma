@@ -11,19 +11,21 @@ datasource db {
 }
 
 model User {
-  id          Int           @id @default(autoincrement())
-  email       String        @unique
-  password    String
-  notes       Note[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  UserRole    UserRole[]
-  Patient     Patient[]
-  Study       Study[]
-  Department  Department[]
-  Category    Category[]
-  Template    Template[]
-  Institution Institution[]
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  password        String
+  notes           Note[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  UserRole        UserRole[]
+  Patient         Patient[]
+  Study           Study[]
+  Department      Department[]
+  Category        Category[]
+  Template        Template[]
+  Institution     Institution[]
+  StudyRemark     StudyRemark[]
+  StudyAttachment StudyAttachment[]
 }
 
 model Note {
@@ -69,23 +71,25 @@ model Patient {
 }
 
 model Study {
-  id                         Int          @id @default(autoincrement())
-  studyId                    String?      @unique
+  id                         Int               @id @default(autoincrement())
+  studyId                    String?           @unique
   studyDIACOMReferenceObject String?
   patientId                  Int?
-  patient                    Patient?     @relation(fields: [patientId], references: [id])
+  patient                    Patient?          @relation(fields: [patientId], references: [id])
   modality                   String?
   referringPhysicianId       Int?
   assignedDoctorId           Int?
   status                     String?
   content                    String?
   institutionId              Int?
-  institution                Institution? @relation(fields: [institutionId], references: [id])
+  institution                Institution?      @relation(fields: [institutionId], references: [id])
   uploadedById               Int?
-  uploadedBy                 User?        @relation(fields: [uploadedById], references: [id])
-  createdAt                  DateTime     @default(now())
-  updatedAt                  DateTime     @updatedAt
+  uploadedBy                 User?             @relation(fields: [uploadedById], references: [id])
+  createdAt                  DateTime          @default(now())
+  updatedAt                  DateTime          @updatedAt
   StudyTag                   StudyTag[]
+  StudyRemark                StudyRemark[]
+  StudyAttachment            StudyAttachment[]
 }
 
 model StudyTag {
@@ -95,6 +99,32 @@ model StudyTag {
   study     Study    @relation(fields: [studyId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model StudyRemark {
+  id          Int      @id @default(autoincrement())
+  studyId     Int
+  study       Study    @relation(fields: [studyId], references: [id])
+  remarkType  String
+  content     String
+  createdById Int?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model StudyAttachment {
+  id          Int      @id @default(autoincrement())
+  studyId     Int
+  study       Study    @relation(fields: [studyId], references: [id])
+  fileName    String
+  filePath    String
+  fileType    String
+  fileSize    Int
+  createdById Int?
+  createdBy   User?    @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Department {

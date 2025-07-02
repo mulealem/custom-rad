@@ -23,6 +23,9 @@ const template_module_1 = require("./template/template.module");
 const institution_module_1 = require("./institution/institution.module");
 const orthanc_module_1 = require("./orthanc/orthanc.module");
 const helpers_service_1 = require("./helpers/helpers.service");
+const study_remark_module_1 = require("./study-remark/study-remark.module");
+const study_attachment_module_1 = require("./study-attachment/study-attachment.module");
+const pdf_module_1 = require("./pdf/pdf.module");
 const configuration_1 = require("./config/configuration");
 let AppModule = class AppModule {
 };
@@ -45,6 +48,9 @@ exports.AppModule = AppModule = __decorate([
             template_module_1.TemplateModule,
             institution_module_1.InstitutionModule,
             orthanc_module_1.OrthancModule,
+            study_remark_module_1.StudyRemarkModule,
+            study_attachment_module_1.StudyAttachmentModule,
+            pdf_module_1.PdfModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, helpers_service_1.HelpersService],

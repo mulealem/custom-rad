@@ -432,7 +432,8 @@ export class OrthancService {
     };
   }
 
-  upload(file: Express.Multer.File) {
+  async upload(file: Express.Multer.File) {
+    console.log('> upload: Received file upload request');
     // save the file to a specific directory
     const uploadPath = join(
       __dirname,
@@ -443,11 +444,29 @@ export class OrthancService {
     );
 
     if (file.buffer) {
+      console.log('> to fs: Received file upload request');
       // MemoryStorage: file.buffer is available
-      const writeStream = createWriteStream(uploadPath);
-      writeStream.write(file.buffer);
-      writeStream.end();
+      // const writeStream = createWriteStream(uploadPath);
+      // writeStream.write(file.buffer);
+      // writeStream.end();
+
+      // upload to Orthanc
+      const orthancUrl = 'http://75.119.148.56:8042/instances';
+      const response = await axios.post(orthancUrl, file.buffer, {
+        headers: {
+          'Content-Type': 'application/dicom',
+        },
+      });
+
+      if (response.status !== 200) {
+        throw new Error(
+          `Failed to upload file to Orthanc: ${response.statusText}`,
+        );
+      } else {
+        console.log('File uploaded to Orthanc successfully');
+      }
     } else if (file.path) {
+      console.log('> to disk: Received file upload request');
       // DiskStorage: file.path is available, file already saved
       // Optionally, you could move/rename the file if needed
     } else {

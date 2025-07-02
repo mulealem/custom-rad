@@ -14,7 +14,6 @@ const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
 const axios_1 = require("axios");
 const path_1 = require("path");
-const fs_1 = require("fs");
 let OrthancService = class OrthancService {
     prisma;
     constructor(prisma) {
@@ -215,14 +214,26 @@ let OrthancService = class OrthancService {
             study,
         };
     }
-    upload(file) {
+    async upload(file) {
+        console.log('> upload: Received file upload request');
         const uploadPath = (0, path_1.join)(__dirname, '..', '..', 'uploads', file.originalname);
         if (file.buffer) {
-            const writeStream = (0, fs_1.createWriteStream)(uploadPath);
-            writeStream.write(file.buffer);
-            writeStream.end();
+            console.log('> to fs: Received file upload request');
+            const orthancUrl = 'http://75.119.148.56:8042/instances';
+            const response = await axios_1.default.post(orthancUrl, file.buffer, {
+                headers: {
+                    'Content-Type': 'application/dicom',
+                },
+            });
+            if (response.status !== 200) {
+                throw new Error(`Failed to upload file to Orthanc: ${response.statusText}`);
+            }
+            else {
+                console.log('File uploaded to Orthanc successfully');
+            }
         }
         else if (file.path) {
+            console.log('> to disk: Received file upload request');
         }
         else {
             throw new Error('File buffer and path are both undefined');
