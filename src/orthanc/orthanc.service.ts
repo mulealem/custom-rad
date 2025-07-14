@@ -8,7 +8,7 @@ import { createWriteStream } from 'fs';
 export class OrthancService {
   constructor(private prisma: PrismaService) {}
 
-  extract(study: any) {
+  extract(tempStudy: any) {
     //     {
     //   "event": "NewInstanceUploaded",
     //   "instanceId": "7daa49bb-831d6aaa-c87e5f33-6cec83cb-81eb38dc",
@@ -18,7 +18,7 @@ export class OrthancService {
     //   "studyInstanceUID": "1.3.6.1.4.1.44316.6.102.1.2023091384336494.746252101381252750643"
     // }
 
-    let study = study.payload;
+    let study = tempStudy.payload;
 
     let std: any;
     if (typeof study === 'string') {
