@@ -18,6 +18,22 @@ export class OrthancService {
     //   "studyInstanceUID": "1.3.6.1.4.1.44316.6.102.1.2023091384336494.746252101381252750643"
     // }
 
+    let std: any;
+    if (typeof study === 'string') {
+      try {
+        std = JSON.parse(study);
+      } catch (e) {
+        throw new Error('Invalid JSON string for study');
+      }
+    } else {
+      std = study;
+    }
+
+    console.log(
+      'Extracting DICOM info for SeriesInstanceUID [std json]:',
+      std.seriesInstanceUID,
+    );
+
     // return axios
     //   .post('http://75.119.148.56:8042/tools/find', {
     //     Level: 'Instance',
@@ -42,7 +58,7 @@ export class OrthancService {
     const seriesInstanceUID = study?.seriesInstanceUID;
 
     console.log(
-      'Extracting DICOM info for SeriesInstanceUID:',
+      'Extracting DICOM info for SeriesInstanceUID [main]:',
       seriesInstanceUID,
     );
 
