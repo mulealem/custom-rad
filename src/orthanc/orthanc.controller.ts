@@ -17,6 +17,7 @@ export class OrthancController {
   constructor(private readonly orthancService: OrthancService) {}
   @Post('extract')
   extract(@Body() study: any) {
+    console.log('study', study);
     return this.orthancService.extract(study);
   }
 
