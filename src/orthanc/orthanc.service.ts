@@ -18,6 +18,8 @@ export class OrthancService {
     //   "studyInstanceUID": "1.3.6.1.4.1.44316.6.102.1.2023091384336494.746252101381252750643"
     // }
 
+    let study = study.payload;
+
     let std: any;
     if (typeof study === 'string') {
       try {
