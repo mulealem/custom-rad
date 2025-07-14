@@ -58,10 +58,10 @@ export class OrthancController {
   // })
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
-      throw new Error('File not provided');
+      throw new Error('[/multer]File not provided');
     }
 
-    // console.log('Received file upload request');
+    console.log('Received file upload request');
 
     return await this.orthancService.upload(file);
   }
