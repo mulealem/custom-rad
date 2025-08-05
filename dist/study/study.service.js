@@ -40,6 +40,7 @@ let StudyService = class StudyService {
             include: {
                 patient: true,
                 institution: true,
+                assignedDoctor: true,
             },
         });
     }
@@ -48,6 +49,7 @@ let StudyService = class StudyService {
             include: {
                 patient: true,
                 institution: true,
+                assignedDoctor: true,
             },
         });
     }
@@ -57,6 +59,7 @@ let StudyService = class StudyService {
             include: {
                 patient: true,
                 institution: true,
+                assignedDoctor: true,
             },
         });
     }
@@ -64,6 +67,12 @@ let StudyService = class StudyService {
         return this.prisma.study.update({
             where: { id },
             data: updateStudyDto,
+        });
+    }
+    assignDoctor(studyIds, doctorId) {
+        return this.prisma.study.updateMany({
+            where: { id: { in: studyIds } },
+            data: { assignedDoctorId: doctorId ? doctorId : null },
         });
     }
     remove(id) {

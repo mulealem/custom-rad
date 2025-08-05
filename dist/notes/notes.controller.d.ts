@@ -13,51 +13,51 @@ export declare class NotesController {
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number;
         title: string;
         content: string;
         referenceId: string;
         metadata: string | null;
-        userId: number;
     }>;
     findAll(req: RequestWithUser): Promise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number;
         title: string;
         content: string;
         referenceId: string;
         metadata: string | null;
-        userId: number;
     }[]>;
     findOne(id: string, req: RequestWithUser): Promise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number;
         title: string;
         content: string;
         referenceId: string;
         metadata: string | null;
-        userId: number;
     } | null>;
     update(id: string, updateNoteDto: UpdateNoteDto, req: RequestWithUser): Promise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number;
         title: string;
         content: string;
         referenceId: string;
         metadata: string | null;
-        userId: number;
     }>;
     remove(id: string, req: RequestWithUser): Promise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number;
         title: string;
         content: string;
         referenceId: string;
         metadata: string | null;
-        userId: number;
     }>;
     searchExternal(query: any): any;
     getNoteByReferenceId(referenceId: string): any;

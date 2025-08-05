@@ -35,6 +35,14 @@ export class StudyController {
     return this.studyService.findOne(+id);
   }
 
+  @Post('/assign-doctor')
+  assignDoctor(
+    @Body('studyIds') studyIds: number[],
+    @Body('doctorId') doctorId: number,
+  ) {
+    return this.studyService.assignDoctor(studyIds, doctorId);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStudyDto: UpdateStudyDto) {
     return this.studyService.update(+id, updateStudyDto);

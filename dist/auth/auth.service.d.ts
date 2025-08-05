@@ -10,6 +10,17 @@ export declare class AuthService {
         id: number;
         email: string;
     }>;
+    updateUserProfile(userId: number, updateData: Partial<RegisterDto>): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        email: string;
+        password: string;
+        fullName: string | null;
+        phoneNumber: string | null;
+        profilePicture: string | null;
+        isActive: boolean;
+    }>;
     login(loginDto: LoginDto): Promise<{
         access_token: string;
     }>;
@@ -19,6 +30,10 @@ export declare class AuthService {
         updatedAt: Date;
         email: string;
         password: string;
+        fullName: string | null;
+        phoneNumber: string | null;
+        profilePicture: string | null;
+        isActive: boolean;
     }>;
     me(userId: number): Promise<{
         id: number;
@@ -26,4 +41,15 @@ export declare class AuthService {
         updatedAt: Date;
         email: string;
     }>;
+    getAllUsers(): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        email: string;
+        password: string;
+        fullName: string | null;
+        phoneNumber: string | null;
+        profilePicture: string | null;
+        isActive: boolean;
+    }[]>;
 }

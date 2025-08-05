@@ -24,6 +24,7 @@ let OrthancController = class OrthancController {
         this.orthancService = orthancService;
     }
     extract(study) {
+        console.log('study', study);
         return this.orthancService.extract(study);
     }
     upload(data) {
@@ -45,8 +46,9 @@ let OrthancController = class OrthancController {
     }
     async uploadFile(file) {
         if (!file) {
-            throw new Error('File not provided');
+            throw new Error('[/multer]File not provided');
         }
+        console.log('Received file upload request');
         return await this.orthancService.upload(file);
     }
 };

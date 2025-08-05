@@ -33,6 +33,7 @@ export class StudyService {
       include: {
         patient: true,
         institution: true,
+        assignedDoctor: true,
       },
     });
   }
@@ -42,6 +43,7 @@ export class StudyService {
       include: {
         patient: true,
         institution: true,
+        assignedDoctor: true,
       },
     });
   }
@@ -52,6 +54,7 @@ export class StudyService {
       include: {
         patient: true,
         institution: true,
+        assignedDoctor: true,
       },
     });
   }
@@ -60,6 +63,13 @@ export class StudyService {
     return this.prisma.study.update({
       where: { id },
       data: updateStudyDto,
+    });
+  }
+
+  assignDoctor(studyIds: number[], doctorId: number) {
+    return this.prisma.study.updateMany({
+      where: { id: { in: studyIds } },
+      data: { assignedDoctorId: doctorId ? doctorId : null },
     });
   }
 

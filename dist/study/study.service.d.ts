@@ -8,6 +8,7 @@ export declare class StudyService {
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number | null;
         content: string | null;
         studyId: string | null;
         modality: string | null;
@@ -37,11 +38,24 @@ export declare class StudyService {
             createdById: number | null;
             abbreviation: string | null;
             slung: string;
+            logo: string | null;
+        } | null;
+        assignedDoctor: {
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            email: string;
+            password: string;
+            fullName: string | null;
+            phoneNumber: string | null;
+            profilePicture: string | null;
+            isActive: boolean;
         } | null;
     } & {
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number | null;
         content: string | null;
         studyId: string | null;
         modality: string | null;
@@ -71,11 +85,24 @@ export declare class StudyService {
             createdById: number | null;
             abbreviation: string | null;
             slung: string;
+            logo: string | null;
+        } | null;
+        assignedDoctor: {
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            email: string;
+            password: string;
+            fullName: string | null;
+            phoneNumber: string | null;
+            profilePicture: string | null;
+            isActive: boolean;
         } | null;
     } & {
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number | null;
         content: string | null;
         studyId: string | null;
         modality: string | null;
@@ -105,11 +132,24 @@ export declare class StudyService {
             createdById: number | null;
             abbreviation: string | null;
             slung: string;
+            logo: string | null;
+        } | null;
+        assignedDoctor: {
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            email: string;
+            password: string;
+            fullName: string | null;
+            phoneNumber: string | null;
+            profilePicture: string | null;
+            isActive: boolean;
         } | null;
     } & {
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number | null;
         content: string | null;
         studyId: string | null;
         modality: string | null;
@@ -125,6 +165,7 @@ export declare class StudyService {
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number | null;
         content: string | null;
         studyId: string | null;
         modality: string | null;
@@ -136,10 +177,12 @@ export declare class StudyService {
         uploadedById: number | null;
         studyDIACOMReferenceObject: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    assignDoctor(studyIds: number[], doctorId: number): import(".prisma/client").Prisma.PrismaPromise<import(".prisma/client").Prisma.BatchPayload>;
     remove(id: number): import(".prisma/client").Prisma.Prisma__StudyClient<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
+        userId: number | null;
         content: string | null;
         studyId: string | null;
         modality: string | null;

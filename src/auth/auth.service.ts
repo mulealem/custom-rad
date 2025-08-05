@@ -16,11 +16,18 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
     const user = await this.prisma.user.create({
       data: {
-        email: registerDto.email,
+        ...registerDto,
         password: hashedPassword,
       },
     });
     return { id: user.id, email: user.email };
+  }
+
+  async updateUserProfile(userId: number, updateData: Partial<RegisterDto>) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+    });
   }
 
   async login(loginDto: LoginDto) {
@@ -68,5 +75,9 @@ export class AuthService {
       throw new UnauthorizedException('User not found');
     }
     return user;
+  }
+
+  async getAllUsers() {
+    return this.prisma.user.findMany({});
   }
 }

@@ -4,6 +4,8 @@ import {
   Body,
   UsePipes,
   ValidationPipe,
+  Get,
+  Param,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dtos/register.dto';
@@ -17,6 +19,15 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
+  }
+
+  @Post(':userId/update-profile')
+  @UsePipes(new ValidationPipe())
+  async updateProfile(
+    @Param('userId') userId: number,
+    @Body() updateProfileDto: Partial<RegisterDto>,
+  ) {
+    return this.authService.updateUserProfile(+userId, updateProfileDto);
   }
 
   @Post('login')
@@ -48,5 +59,10 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   async me(@Body() user: { id: number }) {
     return this.authService.me(user.id);
+  }
+
+  @Get('users')
+  async getAllUsers() {
+    return this.authService.getAllUsers();
   }
 }

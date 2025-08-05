@@ -34,6 +34,9 @@ let StudyController = class StudyController {
     findOne(id) {
         return this.studyService.findOne(+id);
     }
+    assignDoctor(studyIds, doctorId) {
+        return this.studyService.assignDoctor(studyIds, doctorId);
+    }
     update(id, updateStudyDto) {
         return this.studyService.update(+id, updateStudyDto);
     }
@@ -69,6 +72,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], StudyController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Post)('/assign-doctor'),
+    __param(0, (0, common_1.Body)('studyIds')),
+    __param(1, (0, common_1.Body)('doctorId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array, Number]),
+    __metadata("design:returntype", void 0)
+], StudyController.prototype, "assignDoctor", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),

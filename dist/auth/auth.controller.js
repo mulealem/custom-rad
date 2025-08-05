@@ -25,6 +25,9 @@ let AuthController = class AuthController {
     async register(registerDto) {
         return this.authService.register(registerDto);
     }
+    async updateProfile(userId, updateProfileDto) {
+        return this.authService.updateUserProfile(+userId, updateProfileDto);
+    }
     async login(loginDto) {
         return this.authService.login(loginDto);
     }
@@ -33,6 +36,9 @@ let AuthController = class AuthController {
     }
     async me(user) {
         return this.authService.me(user.id);
+    }
+    async getAllUsers() {
+        return this.authService.getAllUsers();
     }
 };
 exports.AuthController = AuthController;
@@ -44,6 +50,15 @@ __decorate([
     __metadata("design:paramtypes", [register_dto_1.RegisterDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
+__decorate([
+    (0, common_1.Post)(':userId/update-profile'),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
+    __param(0, (0, common_1.Param)('userId')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "updateProfile", null);
 __decorate([
     (0, common_1.Post)('login'),
     (0, common_1.UsePipes)(new common_1.ValidationPipe()),
@@ -68,6 +83,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "me", null);
+__decorate([
+    (0, common_1.Get)('users'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "getAllUsers", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

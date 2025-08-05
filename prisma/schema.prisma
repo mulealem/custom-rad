@@ -14,6 +14,10 @@ model User {
   id              Int               @id @default(autoincrement())
   email           String            @unique
   password        String
+  fullName        String?
+  phoneNumber     String?
+  profilePicture  String?
+  isActive        Boolean           @default(true)
   notes           Note[]
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
@@ -26,6 +30,8 @@ model User {
   Institution     Institution[]
   StudyRemark     StudyRemark[]
   StudyAttachment StudyAttachment[]
+  uploadedBy      Study[]           @relation("UploadedBy")
+  assignedDoctor  Study[]           @relation("AssignedDoctor")
 }
 
 model Note {
@@ -79,17 +85,20 @@ model Study {
   modality                   String?
   referringPhysicianId       Int?
   assignedDoctorId           Int?
+  assignedDoctor             User?             @relation("AssignedDoctor", fields: [assignedDoctorId], references: [id])
   status                     String?
   content                    String?
   institutionId              Int?
   institution                Institution?      @relation(fields: [institutionId], references: [id])
   uploadedById               Int?
-  uploadedBy                 User?             @relation(fields: [uploadedById], references: [id])
+  uploadedBy                 User?             @relation("UploadedBy", fields: [uploadedById], references: [id])
   createdAt                  DateTime          @default(now())
   updatedAt                  DateTime          @updatedAt
   StudyTag                   StudyTag[]
   StudyRemark                StudyRemark[]
   StudyAttachment            StudyAttachment[]
+  User                       User?             @relation(fields: [userId], references: [id])
+  userId                     Int?
 }
 
 model StudyTag {
@@ -170,6 +179,7 @@ model Institution {
   title        String?
   slung        String   @unique @default(cuid())
   abbreviation String?
+  logo         String?
   createdById  Int?
   createdBy    User?    @relation(fields: [createdById], references: [id])
   createdAt    DateTime @default(now())

@@ -19,13 +19,27 @@ let OrthancService = class OrthancService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    extract(study) {
+    extract(tempStudy) {
+        let study = tempStudy.payload;
+        let std;
+        if (typeof study === 'string') {
+            try {
+                std = JSON.parse(study);
+            }
+            catch (e) {
+                throw new Error('Invalid JSON string for study');
+            }
+        }
+        else {
+            std = study;
+        }
+        console.log('Extracting DICOM info for SeriesInstanceUID [std json]:', std.seriesInstanceUID);
         const orthancUrl = 'http://75.119.148.56:8042';
         const client = axios_1.default.create({
             baseURL: orthancUrl,
         });
         const seriesInstanceUID = study?.seriesInstanceUID;
-        console.log('Extracting DICOM info for SeriesInstanceUID:', seriesInstanceUID);
+        console.log('Extracting DICOM info for SeriesInstanceUID [main]:', seriesInstanceUID);
         return (client
             .post('/tools/lookup', seriesInstanceUID)
             .then((response) => {
