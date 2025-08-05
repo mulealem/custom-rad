@@ -79,6 +79,7 @@ model Patient {
 model Study {
   id                         Int               @id @default(autoincrement())
   studyId                    String?           @unique
+  parentStudyReferenceId     String?           @unique
   studyDIACOMReferenceObject String?
   patientId                  Int?
   patient                    Patient?          @relation(fields: [patientId], references: [id])

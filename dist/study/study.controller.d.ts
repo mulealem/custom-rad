@@ -19,6 +19,7 @@ export declare class StudyController {
         institutionId: number | null;
         uploadedById: number | null;
         studyDIACOMReferenceObject: string | null;
+        parentStudyReferenceId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     search(query: any): import(".prisma/client").Prisma.PrismaPromise<({
         patient: {
@@ -66,6 +67,7 @@ export declare class StudyController {
         institutionId: number | null;
         uploadedById: number | null;
         studyDIACOMReferenceObject: string | null;
+        parentStudyReferenceId: string | null;
     })[]>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<({
         patient: {
@@ -113,6 +115,7 @@ export declare class StudyController {
         institutionId: number | null;
         uploadedById: number | null;
         studyDIACOMReferenceObject: string | null;
+        parentStudyReferenceId: string | null;
     })[]>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__StudyClient<({
         patient: {
@@ -160,6 +163,7 @@ export declare class StudyController {
         institutionId: number | null;
         uploadedById: number | null;
         studyDIACOMReferenceObject: string | null;
+        parentStudyReferenceId: string | null;
     }) | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     assignDoctor(studyIds: number[], doctorId: number): import(".prisma/client").Prisma.PrismaPromise<import(".prisma/client").Prisma.BatchPayload>;
     update(id: string, updateStudyDto: UpdateStudyDto): import(".prisma/client").Prisma.Prisma__StudyClient<{
@@ -177,6 +181,7 @@ export declare class StudyController {
         institutionId: number | null;
         uploadedById: number | null;
         studyDIACOMReferenceObject: string | null;
+        parentStudyReferenceId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__StudyClient<{
         id: number;
@@ -193,5 +198,6 @@ export declare class StudyController {
         institutionId: number | null;
         uploadedById: number | null;
         studyDIACOMReferenceObject: string | null;
+        parentStudyReferenceId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
 }

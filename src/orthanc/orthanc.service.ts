@@ -162,9 +162,14 @@ export class OrthancService {
 
                           //       // check if study exists in the database, if not create it with patient and institution
 
+                          const parentStudyReferenceId =
+                            seriesResponse.data.ParentStudy;
+
                           const studyExists =
                             await this.prisma.study.findUnique({
-                              where: { studyId: seriesInstanceUID },
+                              where: {
+                                parentStudyReferenceId: parentStudyReferenceId,
+                              },
                             });
                           if (!studyExists) {
                             // Create the study if it doesn't exist
@@ -172,6 +177,8 @@ export class OrthancService {
                               .create({
                                 data: {
                                   studyId: seriesInstanceUID,
+                                  parentStudyReferenceId:
+                                    parentStudyReferenceId,
                                   status: 'pending',
                                   studyDIACOMReferenceObject: JSON.stringify({
                                     seriesResponse: seriesResponse.data,

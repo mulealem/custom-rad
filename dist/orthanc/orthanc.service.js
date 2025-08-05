@@ -81,14 +81,18 @@ let OrthancService = class OrthancService {
                             .get(`/instances/${instanceId}/tags`)
                             .then(async (instanceTagsResponse) => {
                             console.log(`'/instances/${instanceId}'`, instanceTagsResponse.data);
+                            const parentStudyReferenceId = seriesResponse.data.ParentStudy;
                             const studyExists = await this.prisma.study.findUnique({
-                                where: { studyId: seriesInstanceUID },
+                                where: {
+                                    parentStudyReferenceId: parentStudyReferenceId,
+                                },
                             });
                             if (!studyExists) {
                                 await this.prisma.study
                                     .create({
                                     data: {
                                         studyId: seriesInstanceUID,
+                                        parentStudyReferenceId: parentStudyReferenceId,
                                         status: 'pending',
                                         studyDIACOMReferenceObject: JSON.stringify({
                                             seriesResponse: seriesResponse.data,
