@@ -96,11 +96,12 @@ let StudyService = class StudyService {
         const fileName = `study-${id}-${Date.now()}.pdf`;
         const diskPath = (0, path_1.join)(uploadsDir, fileName);
         (0, fs_1.writeFileSync)(diskPath, pdfBuffer);
+        const publicPath = `/uploads/${fileName}`;
         const attachment = await this.prisma.studyAttachment.create({
             data: {
                 studyId: id,
                 fileName,
-                filePath: diskPath,
+                filePath: publicPath,
                 fileType: 'application/pdf',
                 fileSize: pdfBuffer.length,
                 createdById: study.uploadedById ?? null,
@@ -110,7 +111,7 @@ let StudyService = class StudyService {
             where: { id },
             data: { status: 'Published' },
         });
-        return { ok: true, attachmentId: attachment.id, fileName };
+        return { ok: true, attachmentId: attachment.id, fileName, filePath: publicPath };
     }
 };
 exports.StudyService = StudyService;

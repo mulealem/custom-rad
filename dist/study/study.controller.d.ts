@@ -187,6 +187,7 @@ export declare class StudyController {
         ok: boolean;
         attachmentId: number;
         fileName: string;
+        filePath: string;
     }>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__StudyClient<{
         id: number;

@@ -206,5 +206,6 @@ export declare class StudyService {
         ok: boolean;
         attachmentId: number;
         fileName: string;
+        filePath: string;
     }>;
 }
