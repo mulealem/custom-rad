@@ -1,5 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import * as pdf from 'html-pdf';
+let phantomBinary: string | undefined;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const phantom = require('phantomjs-prebuilt');
+  phantomBinary = phantom.path;
+} catch (_) {
+  // fallback: rely on system or env PHANTOM_PATH
+}
 
 @Injectable()
 export class PdfService {
@@ -12,8 +20,7 @@ export class PdfService {
         bottom: '10mm',
         left: '10mm',
       },
-      // Allow user to supply PHANTOM_PATH via env if bundled PhantomJS missing
-      phantomPath: process.env.PHANTOM_PATH,
+      phantomPath: process.env.PHANTOM_PATH || phantomBinary,
     };
 
     return new Promise((resolve, reject) => {
