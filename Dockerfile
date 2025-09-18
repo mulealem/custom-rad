@@ -22,7 +22,8 @@ RUN npm run build && npm prune --omit=dev
 FROM node:22-slim AS runtime
 WORKDIR /app
 
-# Install system packages required by headless Chromium (Puppeteer)
+# Install system packages (fonts & rendering libs). html-pdf-node uses a lightweight headless engine (no full Chromium),
+# but keeping common font libs improves layout fidelity.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     fonts-liberation \
@@ -53,9 +54,7 @@ COPY package.json package-lock.json* ./
 RUN mkdir -p /app/uploads
 VOLUME /app/uploads
 
-ENV NODE_ENV=production \
-    # Prevent Puppeteer from downloading Chromium again; we reuse the one from node_modules/.cache
-    PUPPETEER_SKIP_DOWNLOAD=1
+ENV NODE_ENV=production
 
 EXPOSE 3000
 

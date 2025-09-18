@@ -37,8 +37,8 @@ export declare class StudyController {
             updatedAt: Date;
             title: string | null;
             createdById: number | null;
-            slung: string;
             abbreviation: string | null;
+            slung: string;
             logo: string | null;
         } | null;
         assignedDoctor: {
@@ -85,8 +85,8 @@ export declare class StudyController {
             updatedAt: Date;
             title: string | null;
             createdById: number | null;
-            slung: string;
             abbreviation: string | null;
+            slung: string;
             logo: string | null;
         } | null;
         assignedDoctor: {
@@ -133,8 +133,8 @@ export declare class StudyController {
             updatedAt: Date;
             title: string | null;
             createdById: number | null;
-            slung: string;
             abbreviation: string | null;
+            slung: string;
             logo: string | null;
         } | null;
         assignedDoctor: {
