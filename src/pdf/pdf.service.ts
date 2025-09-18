@@ -1,6 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as html_to_pdf from 'html-pdf-node';
 
+export interface PdfGenerationOptions {
+  headerTemplate?: string;
+  footerTemplate?: string;
+  displayHeaderFooter?: boolean;
+  margin?: {
+    top?: string; right?: string; bottom?: string; left?: string;
+  };
+  format?: string; // default A4
+}
+
 @Injectable()
 export class PdfService {
   private readonly logger = new Logger(PdfService.name);
@@ -19,15 +29,25 @@ export class PdfService {
     }
   }
 
-  async generatePdfFromHtml(htmlContent: string): Promise<Buffer> {
+  async generatePdfFromHtml(htmlContent: string, options: PdfGenerationOptions = {}): Promise<Buffer> {
     const start = Date.now();
     try {
       const file: html_to_pdf.Source = { content: htmlContent };
+      const {
+        headerTemplate,
+        footerTemplate,
+        displayHeaderFooter,
+        margin,
+        format
+      } = options;
       const buffer = await this.withTimeout(
         html_to_pdf.generatePdf(file, {
-          format: 'A4',
-          margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
+          format: format || 'A4',
+          margin: { top: '15mm', right: '10mm', bottom: '15mm', left: '10mm', ...(margin || {}) },
           printBackground: true,
+          headerTemplate: headerTemplate || undefined,
+          footerTemplate: footerTemplate || undefined,
+          displayHeaderFooter: displayHeaderFooter ?? !!(headerTemplate || footerTemplate),
         }) as Promise<Buffer>,
         30000,
         'generatePdf'

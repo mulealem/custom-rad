@@ -26,14 +26,18 @@ let PdfService = PdfService_1 = class PdfService {
             clearTimeout(timeoutHandle);
         }
     }
-    async generatePdfFromHtml(htmlContent) {
+    async generatePdfFromHtml(htmlContent, options = {}) {
         const start = Date.now();
         try {
             const file = { content: htmlContent };
+            const { headerTemplate, footerTemplate, displayHeaderFooter, margin, format } = options;
             const buffer = await this.withTimeout(html_to_pdf.generatePdf(file, {
-                format: 'A4',
-                margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
+                format: format || 'A4',
+                margin: { top: '15mm', right: '10mm', bottom: '15mm', left: '10mm', ...(margin || {}) },
                 printBackground: true,
+                headerTemplate: headerTemplate || undefined,
+                footerTemplate: footerTemplate || undefined,
+                displayHeaderFooter: displayHeaderFooter ?? !!(headerTemplate || footerTemplate),
             }), 30000, 'generatePdf');
             this.logger.debug(`PDF generated in ${Date.now() - start}ms (${(buffer.length / 1024).toFixed(1)} KB)`);
             return buffer;
