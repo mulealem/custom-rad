@@ -71,6 +71,11 @@ export class NotesController {
     return this.notesService.queryExternalApiWithOrthanc(query);
   }
 
+  @Post('search')
+  search(@Body() filters: any, @Request() req: RequestWithUser) {
+    return this.notesService.search(filters, req.user.userId);
+  }
+
   @Get('studies/:referenceId')
   getNoteByReferenceId(@Param('referenceId') referenceId: string): any {
     return this.notesService.findByReferenceId(referenceId);

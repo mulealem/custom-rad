@@ -17,16 +17,23 @@ const common_1 = require("@nestjs/common");
 const template_service_1 = require("./template.service");
 const create_template_dto_1 = require("./dto/create-template.dto");
 const update_template_dto_1 = require("./dto/update-template.dto");
+const passport_1 = require("@nestjs/passport");
 let TemplateController = class TemplateController {
     templateService;
     constructor(templateService) {
         this.templateService = templateService;
     }
-    create(createTemplateDto) {
-        return this.templateService.create(createTemplateDto);
+    create(createTemplateDto, req) {
+        const userId = Number(req.user?.userId);
+        return this.templateService.create({
+            ...createTemplateDto,
+            createdById: userId,
+        });
     }
-    findAll() {
-        return this.templateService.findAll();
+    findAll(req, all) {
+        const userId = Number(req.user?.userId);
+        const includeAll = all === 'true';
+        return this.templateService.findAll(includeAll ? undefined : userId);
     }
     findOne(id) {
         return this.templateService.findOne(+id);
@@ -37,19 +44,25 @@ let TemplateController = class TemplateController {
     remove(id) {
         return this.templateService.remove(+id);
     }
+    search(filters) {
+        return this.templateService.search(filters);
+    }
 };
 exports.TemplateController = TemplateController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_template_dto_1.CreateTemplateDto]),
+    __metadata("design:paramtypes", [create_template_dto_1.CreateTemplateDto, Object]),
     __metadata("design:returntype", void 0)
 ], TemplateController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)('all')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", void 0)
 ], TemplateController.prototype, "findAll", null);
 __decorate([
@@ -74,7 +87,15 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], TemplateController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)('search'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], TemplateController.prototype, "search", null);
 exports.TemplateController = TemplateController = __decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Controller)('templates'),
     __metadata("design:paramtypes", [template_service_1.TemplateService])
 ], TemplateController);

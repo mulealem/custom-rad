@@ -42,4 +42,9 @@ export class StudyRemarkController {
   remove(@Param('id') id: string) {
     return this.studyRemarkService.remove(+id);
   }
+
+  @Post('search')
+  search(@Body() filters: any) {
+    return this.studyRemarkService.search(filters);
+  }
 }

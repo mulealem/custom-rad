@@ -12,10 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudyService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
+const pdf_service_1 = require("../pdf/pdf.service");
+const path_1 = require("path");
+const fs_1 = require("fs");
 let StudyService = class StudyService {
     prisma;
-    constructor(prisma) {
+    pdfService;
+    constructor(prisma, pdfService) {
         this.prisma = prisma;
+        this.pdfService = pdfService;
     }
     create(createStudyDto) {
         return this.prisma.study.create({ data: createStudyDto });
@@ -78,10 +83,39 @@ let StudyService = class StudyService {
     remove(id) {
         return this.prisma.study.delete({ where: { id } });
     }
+    async publish(id, html) {
+        const study = await this.prisma.study.findUnique({ where: { id } });
+        if (!study)
+            throw new Error('Study not found');
+        const htmlContent = html || study.content || '<html><body><p>No content</p></body></html>';
+        const pdfBuffer = await this.pdfService.generatePdfFromHtml(htmlContent);
+        const uploadsDir = (0, path_1.join)(process.cwd(), 'uploads');
+        if (!(0, fs_1.existsSync)(uploadsDir)) {
+            (0, fs_1.mkdirSync)(uploadsDir, { recursive: true });
+        }
+        const fileName = `study-${id}-${Date.now()}.pdf`;
+        const diskPath = (0, path_1.join)(uploadsDir, fileName);
+        (0, fs_1.writeFileSync)(diskPath, pdfBuffer);
+        const attachment = await this.prisma.studyAttachment.create({
+            data: {
+                studyId: id,
+                fileName,
+                filePath: diskPath,
+                fileType: 'application/pdf',
+                fileSize: pdfBuffer.length,
+                createdById: study.uploadedById ?? null,
+            },
+        });
+        await this.prisma.study.update({
+            where: { id },
+            data: { status: 'Published' },
+        });
+        return { ok: true, attachmentId: attachment.id, fileName };
+    }
 };
 exports.StudyService = StudyService;
 exports.StudyService = StudyService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, pdf_service_1.PdfService])
 ], StudyService);
 //# sourceMappingURL=study.service.js.map

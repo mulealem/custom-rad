@@ -17,6 +17,7 @@ exports.PdfModule = PdfModule = __decorate([
     (0, common_1.Module)({
         controllers: [pdf_controller_1.PdfController],
         providers: [pdf_service_1.PdfService],
+        exports: [pdf_service_1.PdfService],
     })
 ], PdfModule);
 //# sourceMappingURL=pdf.module.js.map

@@ -37,8 +37,8 @@ export declare class StudyController {
             updatedAt: Date;
             title: string | null;
             createdById: number | null;
-            abbreviation: string | null;
             slung: string;
+            abbreviation: string | null;
             logo: string | null;
         } | null;
         assignedDoctor: {
@@ -85,8 +85,8 @@ export declare class StudyController {
             updatedAt: Date;
             title: string | null;
             createdById: number | null;
-            abbreviation: string | null;
             slung: string;
+            abbreviation: string | null;
             logo: string | null;
         } | null;
         assignedDoctor: {
@@ -133,8 +133,8 @@ export declare class StudyController {
             updatedAt: Date;
             title: string | null;
             createdById: number | null;
-            abbreviation: string | null;
             slung: string;
+            abbreviation: string | null;
             logo: string | null;
         } | null;
         assignedDoctor: {
@@ -183,6 +183,11 @@ export declare class StudyController {
         studyDIACOMReferenceObject: string | null;
         parentStudyReferenceId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    publish(id: string, html: string): Promise<{
+        ok: boolean;
+        attachmentId: number;
+        fileName: string;
+    }>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__StudyClient<{
         id: number;
         createdAt: Date;

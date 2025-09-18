@@ -1,9 +1,11 @@
 import { CreateStudyDto } from './dto/create-study.dto';
 import { UpdateStudyDto } from './dto/update-study.dto';
 import { PrismaService } from '../prisma.service';
+import { PdfService } from '../pdf/pdf.service';
 export declare class StudyService {
     private prisma;
-    constructor(prisma: PrismaService);
+    private pdfService;
+    constructor(prisma: PrismaService, pdfService: PdfService);
     create(createStudyDto: CreateStudyDto): import(".prisma/client").Prisma.Prisma__StudyClient<{
         id: number;
         createdAt: Date;
@@ -37,8 +39,8 @@ export declare class StudyService {
             updatedAt: Date;
             title: string | null;
             createdById: number | null;
-            abbreviation: string | null;
             slung: string;
+            abbreviation: string | null;
             logo: string | null;
         } | null;
         assignedDoctor: {
@@ -85,8 +87,8 @@ export declare class StudyService {
             updatedAt: Date;
             title: string | null;
             createdById: number | null;
-            abbreviation: string | null;
             slung: string;
+            abbreviation: string | null;
             logo: string | null;
         } | null;
         assignedDoctor: {
@@ -133,8 +135,8 @@ export declare class StudyService {
             updatedAt: Date;
             title: string | null;
             createdById: number | null;
-            abbreviation: string | null;
             slung: string;
+            abbreviation: string | null;
             logo: string | null;
         } | null;
         assignedDoctor: {
@@ -200,4 +202,9 @@ export declare class StudyService {
         studyDIACOMReferenceObject: string | null;
         parentStudyReferenceId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    publish(id: number, html?: string): Promise<{
+        ok: boolean;
+        attachmentId: number;
+        fileName: string;
+    }>;
 }

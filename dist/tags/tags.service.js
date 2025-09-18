@@ -41,6 +41,24 @@ let TagsService = class TagsService {
             where: { id },
         });
     }
+    async search(filters) {
+        const where = {};
+        if (filters.Ids)
+            where.id = { in: filters.Ids };
+        if (filters.name)
+            where.name = { contains: filters.name, mode: 'insensitive' };
+        if (filters.createdAtStart || filters.createdAtEnd) {
+            where.createdAt = {};
+            if (filters.createdAtStart)
+                where.createdAt.gte = new Date(filters.createdAtStart);
+            if (filters.createdAtEnd)
+                where.createdAt.lte = new Date(filters.createdAtEnd);
+        }
+        const take = filters?.take ? Number(filters.take) : undefined;
+        const skip = filters?.skip ? Number(filters.skip) : undefined;
+        const orderBy = filters?.orderBy && filters?.order ? { [filters.orderBy]: filters.order } : undefined;
+        return this.prisma.tag.findMany({ where, take, skip, orderBy });
+    }
 };
 exports.TagsService = TagsService;
 exports.TagsService = TagsService = __decorate([

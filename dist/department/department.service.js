@@ -35,6 +35,32 @@ let DepartmentService = class DepartmentService {
     remove(id) {
         return this.prisma.department.delete({ where: { id } });
     }
+    async search(filters) {
+        const where = {};
+        if (filters.Ids) {
+            where.id = { in: filters.Ids };
+        }
+        if (filters.title)
+            where.title = { contains: filters.title, mode: 'insensitive' };
+        if (filters.abbreviation)
+            where.abbreviation = {
+                contains: filters.abbreviation,
+                mode: 'insensitive',
+            };
+        if (filters.createdAtStart || filters.createdAtEnd) {
+            where.createdAt = {};
+            if (filters.createdAtStart) {
+                where.createdAt.gte = new Date(filters.createdAtStart);
+            }
+            if (filters.createdAtEnd) {
+                where.createdAt.lte = new Date(filters.createdAtEnd);
+            }
+        }
+        const take = filters?.take ? Number(filters.take) : undefined;
+        const skip = filters?.skip ? Number(filters.skip) : undefined;
+        const orderBy = filters?.orderBy && filters?.order ? { [filters.orderBy]: filters.order } : undefined;
+        return this.prisma.department.findMany({ where, take, skip, orderBy });
+    }
 };
 exports.DepartmentService = DepartmentService;
 exports.DepartmentService = DepartmentService = __decorate([

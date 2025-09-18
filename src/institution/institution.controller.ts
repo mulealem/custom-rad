@@ -42,4 +42,9 @@ export class InstitutionController {
   remove(@Param('id') id: string) {
     return this.institutionService.remove(+id);
   }
+  // POST /institutions/search
+  @Post('search')
+  search(@Body() filters: any) {
+    return this.institutionService.search(filters);
+  }
 }

@@ -9,6 +9,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HelpersService = void 0;
 const common_1 = require("@nestjs/common");
 let HelpersService = class HelpersService {
+    buildPaginationAndSort(filters) {
+        const take = filters?.take ? Number(filters.take) : undefined;
+        const skip = filters?.skip ? Number(filters.skip) : undefined;
+        let orderBy = undefined;
+        if (filters?.orderBy && filters?.order) {
+            orderBy = { [filters.orderBy]: filters.order };
+        }
+        return { take, skip, orderBy };
+    }
 };
 exports.HelpersService = HelpersService;
 exports.HelpersService = HelpersService = __decorate([

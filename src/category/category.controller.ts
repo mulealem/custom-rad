@@ -42,4 +42,9 @@ export class CategoryController {
   remove(@Param('id') id: string) {
     return this.categoryService.remove(+id);
   }
+  // POST /categories/search
+  @Post('search')
+  search(@Body() filters: any) {
+    return this.categoryService.search(filters);
+  }
 }

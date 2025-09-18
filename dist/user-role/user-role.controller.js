@@ -37,6 +37,9 @@ let UserRoleController = class UserRoleController {
     remove(id) {
         return this.userRoleService.remove(+id);
     }
+    search(filters) {
+        return this.userRoleService.search(filters);
+    }
 };
 exports.UserRoleController = UserRoleController;
 __decorate([
@@ -74,6 +77,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UserRoleController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)('search'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UserRoleController.prototype, "search", null);
 exports.UserRoleController = UserRoleController = __decorate([
     (0, common_1.Controller)('user-role'),
     __metadata("design:paramtypes", [user_role_service_1.UserRoleService])

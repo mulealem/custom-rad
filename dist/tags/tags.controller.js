@@ -36,6 +36,9 @@ let TagsController = class TagsController {
     delete(id) {
         return this.tagsService.delete(Number(id));
     }
+    search(filters) {
+        return this.tagsService.search(filters);
+    }
 };
 exports.TagsController = TagsController;
 __decorate([
@@ -75,6 +78,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], TagsController.prototype, "delete", null);
+__decorate([
+    (0, common_1.Post)('search'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], TagsController.prototype, "search", null);
 exports.TagsController = TagsController = __decorate([
     (0, common_1.Controller)('tags'),
     __metadata("design:paramtypes", [tags_service_1.TagsService])

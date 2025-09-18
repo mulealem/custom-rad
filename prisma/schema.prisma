@@ -127,6 +127,7 @@ model StudyAttachment {
   id          Int      @id @default(autoincrement())
   studyId     Int
   study       Study    @relation(fields: [studyId], references: [id])
+  studyTag    String?
   fileName    String
   filePath    String
   fileType    String

@@ -39,4 +39,11 @@ export declare class UserRoleController {
         userId: number;
         role: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    search(filters: any): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: number;
+        role: string;
+    }[]>;
 }

@@ -41,4 +41,9 @@ export class TagsController {
   delete(@Param('id') id: string) {
     return this.tagsService.delete(Number(id));
   }
+
+  @Post('search')
+  search(@Body() filters: any) {
+    return this.tagsService.search(filters);
+  }
 }

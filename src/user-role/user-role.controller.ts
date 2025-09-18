@@ -31,4 +31,9 @@ export class UserRoleController {
   remove(@Param('id') id: string) {
     return this.userRoleService.remove(+id);
   }
+
+  @Post('search')
+  search(@Body() filters: any) {
+    return this.userRoleService.search(filters);
+  }
 }

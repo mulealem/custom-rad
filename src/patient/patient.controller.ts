@@ -39,4 +39,9 @@ export class PatientController {
   remove(@Param('id') id: string) {
     return this.patientService.remove(+id);
   }
+  // POST /patients/search
+  @Post('search')
+  search(@Body() filters: any) {
+    return this.patientService.search(filters);
+  }
 }

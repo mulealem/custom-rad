@@ -1,3 +1,43 @@
+## Search Endpoints
+
+All major resources support flexible search via `POST /<resource>/search`.
+
+Common filters:
+- `Ids`: number[] — filter by ids
+- `createdByIds`: number[] — filter by creator
+- `createdAtStart` / `createdAtEnd`: ISO strings — date range
+- `take` / `skip`: numbers — pagination
+- `orderBy`: string, `order`: `asc`|`desc` — sorting
+
+Resource-specific filters:
+- `patients`: `gender`, `name` (contains), `dateOfBirthStart/End`
+- `studies`: see existing `StudyService.search`
+- `institutions`: `title` (contains), `abbreviation` (contains), `slung` (contains)
+- `departments`: `title` (contains), `abbreviation` (contains)
+- `categories`: `title` (contains), `abbreviation` (contains)
+- `templates`: `categoryIds`, `createdByIds`, `title` (contains), `content` (contains)
+- `tags`: `name` (contains)
+- `user-role`: `userIds`, `role` (contains)
+- `studyRemarks`: `studyIds`, `createdByIds`, `remarkType` (contains), `content` (contains)
+- `studyAttachments`: `studyIds`, `createdByIds`, `fileName` (contains), `fileType` (contains)
+- `notes`: `title` (contains), `content` (contains), `referenceId` (scoped to current user)
+
+Example: Patients
+POST `/patients/search`
+```
+{
+  "Ids": [1, 8],
+  "createdByIds": [1, 9],
+  "gender": "male",
+  "name": "john",
+  "createdAtStart": "2025-01-01",
+  "createdAtEnd": "2025-12-31",
+  "take": 25,
+  "skip": 0,
+  "orderBy": "createdAt",
+  "order": "desc"
+}
+```
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>

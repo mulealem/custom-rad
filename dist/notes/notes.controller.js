@@ -44,6 +44,9 @@ let NotesController = class NotesController {
         inspector_1.console.log('Searching external API with Orthanc');
         return this.notesService.queryExternalApiWithOrthanc(query);
     }
+    search(filters, req) {
+        return this.notesService.search(filters, req.user.userId);
+    }
     getNoteByReferenceId(referenceId) {
         return this.notesService.findByReferenceId(referenceId);
     }
@@ -119,6 +122,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Object)
 ], NotesController.prototype, "searchExternal", null);
+__decorate([
+    (0, common_1.Post)('search'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], NotesController.prototype, "search", null);
 __decorate([
     (0, common_1.Get)('studies/:referenceId'),
     __param(0, (0, common_1.Param)('referenceId')),

@@ -4,7 +4,9 @@ import { PrismaService } from '../prisma.service';
 export declare class TemplateService {
     private prisma;
     constructor(prisma: PrismaService);
-    create(createTemplateDto: CreateTemplateDto): import(".prisma/client").Prisma.Prisma__TemplateClient<{
+    create(createTemplateDto: CreateTemplateDto & {
+        createdById?: number;
+    }): import(".prisma/client").Prisma.Prisma__TemplateClient<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -14,7 +16,7 @@ export declare class TemplateService {
         categoryId: number;
         ordinal: number;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    findAll(): import(".prisma/client").Prisma.PrismaPromise<{
+    findAll(createdById?: number): import(".prisma/client").Prisma.PrismaPromise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -54,4 +56,14 @@ export declare class TemplateService {
         categoryId: number;
         ordinal: number;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    search(filters: any): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        content: string;
+        createdById: number | null;
+        categoryId: number;
+        ordinal: number;
+    }[]>;
 }

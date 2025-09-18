@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateStudyAttachmentDto = void 0;
 class CreateStudyAttachmentDto {
     studyId;
+    studyTag;
     fileName;
     filePath;
     fileType;

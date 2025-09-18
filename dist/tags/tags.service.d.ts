@@ -33,4 +33,10 @@ export declare class TagsService {
         createdAt: Date;
         updatedAt: Date;
     }>;
+    search(filters: any): Promise<{
+        name: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
 }

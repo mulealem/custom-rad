@@ -37,6 +37,9 @@ let InstitutionController = class InstitutionController {
     remove(id) {
         return this.institutionService.remove(+id);
     }
+    search(filters) {
+        return this.institutionService.search(filters);
+    }
 };
 exports.InstitutionController = InstitutionController;
 __decorate([
@@ -74,6 +77,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], InstitutionController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)('search'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], InstitutionController.prototype, "search", null);
 exports.InstitutionController = InstitutionController = __decorate([
     (0, common_1.Controller)('institutions'),
     __metadata("design:paramtypes", [institution_service_1.InstitutionService])

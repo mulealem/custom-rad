@@ -49,4 +49,13 @@ export declare class StudyRemarkController {
         createdById: number | null;
         remarkType: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    search(filters: any): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        content: string;
+        studyId: number;
+        createdById: number | null;
+        remarkType: string;
+    }[]>;
 }

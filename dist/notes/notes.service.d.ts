@@ -70,6 +70,16 @@ export declare class NotesService {
         referenceId: string;
         metadata: string | null;
     }>;
+    search(filters: any, userId: number): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: number;
+        title: string;
+        content: string;
+        referenceId: string;
+        metadata: string | null;
+    }[]>;
     queryExternalApiWithOrthanc(query: any): any[];
     getOrthanicStudyByID(studyId: string): any;
     uploadOrthanicStudy(studyFile: any): any;

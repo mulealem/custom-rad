@@ -37,6 +37,9 @@ let PatientController = class PatientController {
     remove(id) {
         return this.patientService.remove(+id);
     }
+    search(filters) {
+        return this.patientService.search(filters);
+    }
 };
 exports.PatientController = PatientController;
 __decorate([
@@ -74,6 +77,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PatientController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)('search'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], PatientController.prototype, "search", null);
 exports.PatientController = PatientController = __decorate([
     (0, common_1.Controller)('patients'),
     __metadata("design:paramtypes", [patient_service_1.PatientService])

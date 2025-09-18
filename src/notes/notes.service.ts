@@ -84,6 +84,25 @@ export class NotesService {
     });
   }
 
+  async search(filters: any, userId: number) {
+    const where: any = { userId };
+    if (filters.Ids) where.id = { in: filters.Ids };
+    if (filters.title)
+      where.title = { contains: filters.title, mode: 'insensitive' };
+    if (filters.content)
+      where.content = { contains: filters.content, mode: 'insensitive' };
+    if (filters.referenceId) where.referenceId = filters.referenceId;
+    if (filters.createdAtStart || filters.createdAtEnd) {
+      where.createdAt = {};
+      if (filters.createdAtStart) where.createdAt.gte = new Date(filters.createdAtStart);
+      if (filters.createdAtEnd) where.createdAt.lte = new Date(filters.createdAtEnd);
+    }
+    const take = filters?.take ? Number(filters.take) : undefined;
+    const skip = filters?.skip ? Number(filters.skip) : undefined;
+    const orderBy = filters?.orderBy && filters?.order ? { [filters.orderBy]: filters.order } : undefined;
+    return this.prisma.note.findMany({ where, take, skip, orderBy });
+  }
+
   queryExternalApiWithOrthanc(query: any): any[] {
     console.log('Querying external API with Orthanc...', query);
     // return [

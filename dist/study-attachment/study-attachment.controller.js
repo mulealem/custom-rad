@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudyAttachmentController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const study_attachment_service_1 = require("./study-attachment.service");
 const create_study_attachment_dto_1 = require("./dto/create-study-attachment.dto");
 const update_study_attachment_dto_1 = require("./dto/update-study-attachment.dto");
@@ -25,8 +26,13 @@ let StudyAttachmentController = class StudyAttachmentController {
     create(createStudyAttachmentDto) {
         return this.studyAttachmentService.create(createStudyAttachmentDto);
     }
-    async uploadFile(file) {
-        return await this.studyAttachmentService.uploadFile(file);
+    async uploadFile(file, studyId, studyTag, req) {
+        const createdById = req.user?.userId;
+        const result = await this.studyAttachmentService.uploadFile(file, studyId ? Number(studyId) : undefined, createdById);
+        if (studyTag) {
+            return this.studyAttachmentService.update(result.id, { studyTag });
+        }
+        return result;
     }
     findAll() {
         return this.studyAttachmentService.findAll();
@@ -40,6 +46,9 @@ let StudyAttachmentController = class StudyAttachmentController {
     remove(id) {
         return this.studyAttachmentService.remove(+id);
     }
+    search(filters) {
+        return this.studyAttachmentService.search(filters);
+    }
 };
 exports.StudyAttachmentController = StudyAttachmentController;
 __decorate([
@@ -51,9 +60,13 @@ __decorate([
 ], StudyAttachmentController.prototype, "create", null);
 __decorate([
     (0, common_1.Post)('upload'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)('studyId')),
+    __param(2, (0, common_1.Body)('studyTag')),
+    __param(3, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, String, String, Object]),
     __metadata("design:returntype", Promise)
 ], StudyAttachmentController.prototype, "uploadFile", null);
 __decorate([
@@ -84,6 +97,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], StudyAttachmentController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)('search'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], StudyAttachmentController.prototype, "search", null);
 exports.StudyAttachmentController = StudyAttachmentController = __decorate([
     (0, common_1.Controller)('studyAttachments'),
     __metadata("design:paramtypes", [study_attachment_service_1.StudyAttachmentService])

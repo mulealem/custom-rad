@@ -42,4 +42,9 @@ export class DepartmentController {
   remove(@Param('id') id: string) {
     return this.departmentService.remove(+id);
   }
+  // POST /departments/search
+  @Post('search')
+  search(@Body() filters: any) {
+    return this.departmentService.search(filters);
+  }
 }

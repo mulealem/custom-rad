@@ -49,4 +49,13 @@ export declare class DepartmentService {
         abbreviation: string | null;
         description: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    search(filters: any): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        createdById: number | null;
+        abbreviation: string | null;
+        description: string | null;
+    }[]>;
 }

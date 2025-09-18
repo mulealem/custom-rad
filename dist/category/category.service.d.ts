@@ -49,4 +49,13 @@ export declare class CategoryService {
         abbreviation: string | null;
         departmentId: number;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    search(filters: any): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        createdById: number | null;
+        abbreviation: string | null;
+        departmentId: number;
+    }[]>;
 }

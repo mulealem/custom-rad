@@ -37,6 +37,9 @@ let DepartmentController = class DepartmentController {
     remove(id) {
         return this.departmentService.remove(+id);
     }
+    search(filters) {
+        return this.departmentService.search(filters);
+    }
 };
 exports.DepartmentController = DepartmentController;
 __decorate([
@@ -74,6 +77,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], DepartmentController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)('search'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], DepartmentController.prototype, "search", null);
 exports.DepartmentController = DepartmentController = __decorate([
     (0, common_1.Controller)('departments'),
     __metadata("design:paramtypes", [department_service_1.DepartmentService])

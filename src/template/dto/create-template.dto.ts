@@ -19,7 +19,6 @@ export class CreateTemplateDto {
   title: string;
 
   @IsInt()
-  @MinLength(1)
   categoryId: number;
 
   @IsString()

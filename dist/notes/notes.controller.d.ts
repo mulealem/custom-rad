@@ -60,6 +60,16 @@ export declare class NotesController {
         metadata: string | null;
     }>;
     searchExternal(query: any): any;
+    search(filters: any, req: RequestWithUser): Promise<{
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: number;
+        title: string;
+        content: string;
+        referenceId: string;
+        metadata: string | null;
+    }[]>;
     getNoteByReferenceId(referenceId: string): any;
     getOrthancStudyById(studyId: string): any;
     handleFileUpload(fileBuffer: Buffer): any;

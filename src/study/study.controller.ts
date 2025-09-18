@@ -48,6 +48,14 @@ export class StudyController {
     return this.studyService.update(+id, updateStudyDto);
   }
 
+  @Post(':id/publish')
+  publish(
+    @Param('id') id: string,
+    @Body('html') html: string,
+  ) {
+    return this.studyService.publish(+id, html);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.studyService.remove(+id);

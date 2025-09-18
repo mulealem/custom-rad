@@ -49,4 +49,13 @@ export declare class PatientController {
         gender: string | null;
         createdById: number | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    search(filters: any): Promise<{
+        name: string | null;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        dateOfBirth: Date | null;
+        gender: string | null;
+        createdById: number | null;
+    }[]>;
 }

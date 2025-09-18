@@ -3,20 +3,26 @@ import { StudyAttachmentService } from './study-attachment.service';
 import { StudyAttachmentController } from './study-attachment.controller';
 import { PrismaService } from '../prisma.service';
 import { MulterModule } from '@nestjs/platform-express';
-import { extname } from 'path';
+import { extname, join } from 'path';
 import { diskStorage } from 'multer';
+import { existsSync, mkdirSync } from 'fs';
 
 @Module({
   imports: [
     MulterModule.register({
-      // storage: diskStorage({
-      //   destination: './uploadds',
-      //   filename: (req, file, callback) => {
-      //     const uniqueSuffix =
-      //       Date.now() + '-' + Math.round(Math.random() * 1e9);
-      //     callback(null, uniqueSuffix + extname(file.originalname));
-      //   },
-      // }),
+      storage: diskStorage({
+        destination: (req, file, cb) => {
+          const uploadsDir = join(process.cwd(), 'uploads');
+          if (!existsSync(uploadsDir)) {
+            mkdirSync(uploadsDir, { recursive: true });
+          }
+          cb(null, uploadsDir);
+        },
+        filename: (req, file, cb) => {
+          const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extname(file.originalname)}`;
+          cb(null, uniqueSuffix);
+        },
+      }),
       fileFilter: (req, file, callback) => {
         const allowedTypes = [
           'image/jpeg',

@@ -24,7 +24,6 @@ __decorate([
 ], CreateTemplateDto.prototype, "title", void 0);
 __decorate([
     (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.MinLength)(1),
     __metadata("design:type", Number)
 ], CreateTemplateDto.prototype, "categoryId", void 0);
 __decorate([

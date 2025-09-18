@@ -40,6 +40,9 @@ let StudyController = class StudyController {
     update(id, updateStudyDto) {
         return this.studyService.update(+id, updateStudyDto);
     }
+    publish(id, html) {
+        return this.studyService.publish(+id, html);
+    }
     remove(id) {
         return this.studyService.remove(+id);
     }
@@ -88,6 +91,14 @@ __decorate([
     __metadata("design:paramtypes", [String, update_study_dto_1.UpdateStudyDto]),
     __metadata("design:returntype", void 0)
 ], StudyController.prototype, "update", null);
+__decorate([
+    (0, common_1.Post)(':id/publish'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)('html')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], StudyController.prototype, "publish", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
