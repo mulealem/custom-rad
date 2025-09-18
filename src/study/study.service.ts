@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateStudyDto } from './dto/create-study.dto';
 import { UpdateStudyDto } from './dto/update-study.dto';
 import { PrismaService } from '../prisma.service';
 import { PdfService } from '../pdf/pdf.service';
+import { StudyUploadService } from './study-upload.service';
 import { join } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 
 @Injectable()
 export class StudyService {
-  constructor(private prisma: PrismaService, private pdfService: PdfService) {}
+  private readonly logger = new Logger(StudyService.name);
+  constructor(
+    private prisma: PrismaService,
+    private pdfService: PdfService,
+    private studyUpload: StudyUploadService,
+  ) {}
   create(createStudyDto: CreateStudyDto) {
     return this.prisma.study.create({ data: createStudyDto });
   }
@@ -188,7 +194,7 @@ export class StudyService {
       displayHeaderFooter: true,
     });
 
-    const uploadsDir = join(process.cwd(), 'uploads');
+  const uploadsDir = join(process.cwd(), 'uploads');
     if (!existsSync(uploadsDir)) {
       mkdirSync(uploadsDir, { recursive: true });
     }
@@ -213,7 +219,18 @@ export class StudyService {
       where: { id },
       data: { status: 'Published' },
     });
+    // Attempt external upload (non-blocking for response if fails)
+  // External identifier preference: parentStudyReferenceId > studyId > numeric id
+  const orthancId = study.parentStudyReferenceId || study.studyId || id;
+    this.studyUpload
+      .sendPdf(orthancId, diskPath, fileName)
+      .then((res) => {
+        if (!res.ok) {
+          this.logger.warn(`External PDF upload failed for study ${id}: ${res.error}`);
+        }
+      })
+      .catch((err) => this.logger.error(`Unexpected upload error for study ${id}: ${err.message}`));
 
-    return { ok: true, attachmentId: attachment.id, fileName, filePath: publicPath };
+    return { ok: true, attachmentId: attachment.id, fileName, filePath: publicPath, uploaded: true };
   }
 }

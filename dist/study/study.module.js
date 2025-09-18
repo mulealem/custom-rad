@@ -12,6 +12,7 @@ const study_service_1 = require("./study.service");
 const study_controller_1 = require("./study.controller");
 const prisma_service_1 = require("../prisma.service");
 const pdf_module_1 = require("../pdf/pdf.module");
+const study_upload_service_1 = require("./study-upload.service");
 let StudyModule = class StudyModule {
 };
 exports.StudyModule = StudyModule;
@@ -19,7 +20,7 @@ exports.StudyModule = StudyModule = __decorate([
     (0, common_1.Module)({
         imports: [pdf_module_1.PdfModule],
         controllers: [study_controller_1.StudyController],
-        providers: [study_service_1.StudyService, prisma_service_1.PrismaService],
+        providers: [study_service_1.StudyService, prisma_service_1.PrismaService, study_upload_service_1.StudyUploadService],
     })
 ], StudyModule);
 //# sourceMappingURL=study.module.js.map

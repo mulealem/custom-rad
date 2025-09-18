@@ -14,4 +14,5 @@ export declare class PdfService {
     private readonly logger;
     private withTimeout;
     generatePdfFromHtml(htmlContent: string, options?: PdfGenerationOptions): Promise<Buffer>;
+    private generatePlainPdf;
 }

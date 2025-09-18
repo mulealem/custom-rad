@@ -2,10 +2,13 @@ import { CreateStudyDto } from './dto/create-study.dto';
 import { UpdateStudyDto } from './dto/update-study.dto';
 import { PrismaService } from '../prisma.service';
 import { PdfService } from '../pdf/pdf.service';
+import { StudyUploadService } from './study-upload.service';
 export declare class StudyService {
     private prisma;
     private pdfService;
-    constructor(prisma: PrismaService, pdfService: PdfService);
+    private studyUpload;
+    private readonly logger;
+    constructor(prisma: PrismaService, pdfService: PdfService, studyUpload: StudyUploadService);
     create(createStudyDto: CreateStudyDto): import(".prisma/client").Prisma.Prisma__StudyClient<{
         id: number;
         studyId: string | null;
@@ -210,5 +213,6 @@ export declare class StudyService {
         attachmentId: number;
         fileName: string;
         filePath: string;
+        uploaded: boolean;
     }>;
 }

@@ -8,19 +8,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var StudyService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudyService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
 const pdf_service_1 = require("../pdf/pdf.service");
+const study_upload_service_1 = require("./study-upload.service");
 const path_1 = require("path");
 const fs_1 = require("fs");
-let StudyService = class StudyService {
+let StudyService = StudyService_1 = class StudyService {
     prisma;
     pdfService;
-    constructor(prisma, pdfService) {
+    studyUpload;
+    logger = new common_1.Logger(StudyService_1.name);
+    constructor(prisma, pdfService, studyUpload) {
         this.prisma = prisma;
         this.pdfService = pdfService;
+        this.studyUpload = studyUpload;
     }
     create(createStudyDto) {
         return this.prisma.study.create({ data: createStudyDto });
@@ -205,12 +210,23 @@ let StudyService = class StudyService {
             where: { id },
             data: { status: 'Published' },
         });
-        return { ok: true, attachmentId: attachment.id, fileName, filePath: publicPath };
+        const orthancId = study.parentStudyReferenceId || study.studyId || id;
+        this.studyUpload
+            .sendPdf(orthancId, diskPath, fileName)
+            .then((res) => {
+            if (!res.ok) {
+                this.logger.warn(`External PDF upload failed for study ${id}: ${res.error}`);
+            }
+        })
+            .catch((err) => this.logger.error(`Unexpected upload error for study ${id}: ${err.message}`));
+        return { ok: true, attachmentId: attachment.id, fileName, filePath: publicPath, uploaded: true };
     }
 };
 exports.StudyService = StudyService;
-exports.StudyService = StudyService = __decorate([
+exports.StudyService = StudyService = StudyService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService, pdf_service_1.PdfService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        pdf_service_1.PdfService,
+        study_upload_service_1.StudyUploadService])
 ], StudyService);
 //# sourceMappingURL=study.service.js.map

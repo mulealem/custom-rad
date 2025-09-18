@@ -136,3 +136,21 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## PDF Reply Upload
+
+When a study is published via `POST /studies/:id/publish`, the backend generates a PDF report and stores it under `uploads/`. After saving, it attempts to POST the PDF to an external service as multipart form-data with the field name `file`.
+
+Environment variable:
+
+```
+REPLY_PDF_ENDPOINT=http://75.119.148.56:5000/api/studies
+```
+
+The final request URL pattern:
+
+```
+${REPLY_PDF_ENDPOINT}/${orthancInternalStudyId}/reply
+```
+
+If `REPLY_PDF_ENDPOINT` is unset, the default above is used. Failures are logged but do not block the publish response.
