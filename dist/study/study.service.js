@@ -15,17 +15,20 @@ const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
 const pdf_service_1 = require("../pdf/pdf.service");
 const study_upload_service_1 = require("./study-upload.service");
+const orthanc_service_1 = require("../orthanc/orthanc.service");
 const path_1 = require("path");
 const fs_1 = require("fs");
 let StudyService = StudyService_1 = class StudyService {
     prisma;
     pdfService;
     studyUpload;
+    orthancService;
     logger = new common_1.Logger(StudyService_1.name);
-    constructor(prisma, pdfService, studyUpload) {
+    constructor(prisma, pdfService, studyUpload, orthancService) {
         this.prisma = prisma;
         this.pdfService = pdfService;
         this.studyUpload = studyUpload;
+        this.orthancService = orthancService;
     }
     create(createStudyDto) {
         return this.prisma.study.create({ data: createStudyDto });
@@ -85,8 +88,74 @@ let StudyService = StudyService_1 = class StudyService {
             data: { assignedDoctorId: doctorId ? doctorId : null },
         });
     }
-    remove(id) {
-        return this.prisma.study.delete({ where: { id } });
+    async remove(id) {
+        const study = await this.prisma.study.findUnique({
+            where: { id },
+            include: {
+                StudyAttachment: true,
+                StudyRemark: true,
+                StudyTag: true,
+            },
+        });
+        if (!study)
+            throw new Error('Study not found');
+        let orthancId = study.parentStudyReferenceId || null;
+        if (!orthancId && study.studyDIACOMReferenceObject) {
+            try {
+                const parsed = JSON.parse(study.studyDIACOMReferenceObject);
+                orthancId = parsed?.seriesResponse?.ParentStudy || parsed?.studyResponse?.ID || null;
+            }
+            catch (_) {
+            }
+        }
+        const toDeleteFs = [];
+        for (const att of study.StudyAttachment) {
+            if (att.filePath && att.filePath.startsWith('/uploads/')) {
+                const abs = (0, path_1.join)(process.cwd(), att.filePath.replace(/^\//, ''));
+                toDeleteFs.push(abs);
+            }
+        }
+        const result = await this.prisma.$transaction(async (tx) => {
+            const attachmentsDeleted = await tx.studyAttachment.deleteMany({ where: { studyId: id } });
+            const remarksDeleted = await tx.studyRemark.deleteMany({ where: { studyId: id } });
+            const tagsDeleted = await tx.studyTag.deleteMany({ where: { studyId: id } });
+            const deletedStudy = await tx.study.delete({ where: { id } });
+            return {
+                deletedStudy,
+                counts: {
+                    attachments: attachmentsDeleted.count,
+                    remarks: remarksDeleted.count,
+                    tags: tagsDeleted.count,
+                },
+            };
+        });
+        for (const p of toDeleteFs) {
+            try {
+                if ((0, fs_1.existsSync)(p))
+                    (0, fs_1.unlinkSync)(p);
+            }
+            catch (e) {
+                this.logger.warn(`Failed removing file ${p}: ${e.message}`);
+            }
+        }
+        let orthanc = { attempted: false };
+        if (orthancId) {
+            orthanc = { attempted: true, id: orthancId };
+            this.orthancService
+                .deleteStudy(orthancId)
+                .then((res) => {
+                if (!res.ok) {
+                    this.logger.warn(`Orthanc study delete failed (${orthancId}): ${res.error}`);
+                }
+            })
+                .catch((err) => this.logger.error(`Orthanc delete error (${orthancId}): ${err.message}`));
+        }
+        return {
+            ok: true,
+            studyId: id,
+            db: result.counts,
+            orthanc,
+        };
     }
     buildReportHTML(study, options = {}) {
         if (options.bodyHtml && /<html[\s>]/i.test(options.bodyHtml)) {
@@ -227,6 +296,7 @@ exports.StudyService = StudyService = StudyService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
         pdf_service_1.PdfService,
-        study_upload_service_1.StudyUploadService])
+        study_upload_service_1.StudyUploadService,
+        orthanc_service_1.OrthancService])
 ], StudyService);
 //# sourceMappingURL=study.service.js.map

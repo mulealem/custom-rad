@@ -4,8 +4,9 @@ import { UpdateStudyDto } from './dto/update-study.dto';
 import { PrismaService } from '../prisma.service';
 import { PdfService } from '../pdf/pdf.service';
 import { StudyUploadService } from './study-upload.service';
+import { OrthancService } from '../orthanc/orthanc.service';
 import { join } from 'path';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class StudyService {
@@ -14,6 +15,7 @@ export class StudyService {
     private prisma: PrismaService,
     private pdfService: PdfService,
     private studyUpload: StudyUploadService,
+    private orthancService: OrthancService,
   ) {}
   create(createStudyDto: CreateStudyDto) {
     return this.prisma.study.create({ data: createStudyDto });
@@ -82,8 +84,83 @@ export class StudyService {
     });
   }
 
-  remove(id: number) {
-    return this.prisma.study.delete({ where: { id } });
+  async remove(id: number) {
+    // Load study with minimal fields and related attachments for filesystem cleanup
+    const study = await this.prisma.study.findUnique({
+      where: { id },
+      include: {
+        StudyAttachment: true,
+        StudyRemark: true,
+        StudyTag: true,
+      },
+    });
+    if (!study) throw new Error('Study not found');
+
+    // Determine Orthanc study id preference
+    let orthancId = study.parentStudyReferenceId || null;
+    if (!orthancId && study.studyDIACOMReferenceObject) {
+      try {
+        const parsed = JSON.parse(study.studyDIACOMReferenceObject);
+        orthancId = parsed?.seriesResponse?.ParentStudy || parsed?.studyResponse?.ID || null;
+      } catch (_) {
+        // ignore parse errors
+      }
+    }
+
+    // Filesystem cleanup list
+    const toDeleteFs: string[] = [];
+    for (const att of study.StudyAttachment) {
+      if (att.filePath && att.filePath.startsWith('/uploads/')) {
+        const abs = join(process.cwd(), att.filePath.replace(/^\//, ''));
+        toDeleteFs.push(abs);
+      }
+    }
+
+    // Perform DB cascade in a transaction
+    const result = await this.prisma.$transaction(async (tx) => {
+      const attachmentsDeleted = await tx.studyAttachment.deleteMany({ where: { studyId: id } });
+      const remarksDeleted = await tx.studyRemark.deleteMany({ where: { studyId: id } });
+      const tagsDeleted = await tx.studyTag.deleteMany({ where: { studyId: id } });
+      const deletedStudy = await tx.study.delete({ where: { id } });
+      return {
+        deletedStudy,
+        counts: {
+          attachments: attachmentsDeleted.count,
+          remarks: remarksDeleted.count,
+          tags: tagsDeleted.count,
+        },
+      };
+    });
+
+    // Delete files off-transaction (ignore errors per file)
+    for (const p of toDeleteFs) {
+      try {
+        if (existsSync(p)) unlinkSync(p);
+      } catch (e) {
+        this.logger.warn(`Failed removing file ${p}: ${(e as Error).message}`);
+      }
+    }
+
+    // Attempt Orthanc deletion non-blocking
+    let orthanc: any = { attempted: false };
+    if (orthancId) {
+      orthanc = { attempted: true, id: orthancId };
+      this.orthancService
+        .deleteStudy(orthancId)
+        .then((res) => {
+          if (!res.ok) {
+            this.logger.warn(`Orthanc study delete failed (${orthancId}): ${res.error}`);
+          }
+        })
+        .catch((err) => this.logger.error(`Orthanc delete error (${orthancId}): ${err.message}`));
+    }
+
+    return {
+      ok: true,
+      studyId: id,
+      db: result.counts,
+      orthanc,
+    };
   }
 
   private buildReportHTML(study: any, options: { bodyHtml?: string } = {}) {

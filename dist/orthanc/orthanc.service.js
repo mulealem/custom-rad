@@ -19,6 +19,26 @@ let OrthancService = class OrthancService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    orthancClient() {
+        const baseURL = process.env.ORTHANC_BASE_URL || 'http://75.119.148.56:8042';
+        const username = process.env.ORTHANC_USERNAME;
+        const password = process.env.ORTHANC_PASSWORD;
+        return axios_1.default.create({
+            baseURL,
+            auth: username && password ? { username, password } : undefined,
+            timeout: 15000,
+        });
+    }
+    async deleteStudy(studyId) {
+        const client = this.orthancClient();
+        try {
+            const res = await client.delete(`/studies/${studyId}`);
+            return { ok: true, status: res.status };
+        }
+        catch (error) {
+            return { ok: false, error: error.message, status: error.response?.status };
+        }
+    }
     extract(tempStudy) {
         let study = tempStudy.payload;
         let std;

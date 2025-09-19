@@ -10,8 +10,8 @@ export declare class InstitutionController {
         updatedAt: Date;
         title: string | null;
         createdById: number | null;
-        abbreviation: string | null;
         slung: string;
+        abbreviation: string | null;
         logo: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<{
@@ -20,8 +20,8 @@ export declare class InstitutionController {
         updatedAt: Date;
         title: string | null;
         createdById: number | null;
-        abbreviation: string | null;
         slung: string;
+        abbreviation: string | null;
         logo: string | null;
     }[]>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__InstitutionClient<{
@@ -30,8 +30,8 @@ export declare class InstitutionController {
         updatedAt: Date;
         title: string | null;
         createdById: number | null;
-        abbreviation: string | null;
         slung: string;
+        abbreviation: string | null;
         logo: string | null;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, updateInstitutionDto: UpdateInstitutionDto): import(".prisma/client").Prisma.Prisma__InstitutionClient<{
@@ -40,8 +40,8 @@ export declare class InstitutionController {
         updatedAt: Date;
         title: string | null;
         createdById: number | null;
-        abbreviation: string | null;
         slung: string;
+        abbreviation: string | null;
         logo: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__InstitutionClient<{
@@ -50,8 +50,8 @@ export declare class InstitutionController {
         updatedAt: Date;
         title: string | null;
         createdById: number | null;
-        abbreviation: string | null;
         slung: string;
+        abbreviation: string | null;
         logo: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     search(filters: any): Promise<{
@@ -60,8 +60,8 @@ export declare class InstitutionController {
         updatedAt: Date;
         title: string | null;
         createdById: number | null;
-        abbreviation: string | null;
         slung: string;
+        abbreviation: string | null;
         logo: string | null;
     }[]>;
 }

@@ -8,6 +8,27 @@ import { createWriteStream } from 'fs';
 export class OrthancService {
   constructor(private prisma: PrismaService) {}
 
+  private orthancClient() {
+    const baseURL = process.env.ORTHANC_BASE_URL || 'http://75.119.148.56:8042';
+    const username = process.env.ORTHANC_USERNAME;
+    const password = process.env.ORTHANC_PASSWORD;
+    return axios.create({
+      baseURL,
+      auth: username && password ? { username, password } : undefined,
+      timeout: 15000,
+    });
+  }
+
+  async deleteStudy(studyId: string) {
+    const client = this.orthancClient();
+    try {
+      const res = await client.delete(`/studies/${studyId}`);
+      return { ok: true, status: res.status };
+    } catch (error: any) {
+      return { ok: false, error: error.message, status: error.response?.status };
+    }
+  }
+
   extract(tempStudy: any) {
     //     {
     //   "event": "NewInstanceUploaded",

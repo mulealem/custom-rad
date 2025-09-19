@@ -154,3 +154,20 @@ ${REPLY_PDF_ENDPOINT}/${orthancInternalStudyId}/reply
 ```
 
 If `REPLY_PDF_ENDPOINT` is unset, the default above is used. Failures are logged but do not block the publish response.
+
+## Orthanc Integration
+
+Environment variables controlling Orthanc connectivity (used for deletion and DICOM extraction):
+
+```
+ORTHANC_BASE_URL=http://75.119.148.56:8042
+ORTHANC_USERNAME=optionalUsername
+ORTHANC_PASSWORD=optionalPassword
+```
+
+When deleting a study via `DELETE /studies/:id`, the service:
+- Removes related `StudyAttachment`, `StudyRemark`, `StudyTag` rows in a transaction
+- Deletes attachment files under `/uploads/`
+- Attempts a best-effort `DELETE /studies/{parentStudyReferenceId}` against Orthanc (if available)
+
+Orthanc failures are logged and do not rollback the database deletion.
