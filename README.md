@@ -160,7 +160,7 @@ If `REPLY_PDF_ENDPOINT` is unset, the default above is used. Failures are logged
 Environment variables controlling Orthanc connectivity (used for deletion and DICOM extraction):
 
 ```
-ORTHANC_BASE_URL=http://75.119.148.56:8042
+ORTHANC_BASE_URL=http://109.123.244.17:8042
 ORTHANC_USERNAME=optionalUsername
 ORTHANC_PASSWORD=optionalPassword
 ```

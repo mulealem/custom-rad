@@ -103,7 +103,7 @@ let NotesService = class NotesService {
     queryExternalApiWithOrthanc(query) {
         console.log('Querying external API with Orthanc...', query);
         return axios
-            .post('http://75.119.148.56:8042/tools/find', {
+            .post('http://109.123.244.17:8042/tools/find', {
             Level: 'Study',
             Query: query,
             Expand: true,
@@ -118,7 +118,7 @@ let NotesService = class NotesService {
             console.log('Received response from Orthanc:');
             return Promise.all(response.data.map((study) => {
                 return axios
-                    .get(`http://75.119.148.56:8042/studies/${study.ID}/series`, {
+                    .get(`http://109.123.244.17:8042/studies/${study.ID}/series`, {
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8',
                         'Access-Control-Allow-Origin': '*',
@@ -128,7 +128,7 @@ let NotesService = class NotesService {
                     console.log('Received series from Orthanc: [2]');
                     const seriesId = seriesRes?.data[0]?.ID;
                     return axios
-                        .get(`http://75.119.148.56:8042/series/${seriesId}/instances`, {
+                        .get(`http://109.123.244.17:8042/series/${seriesId}/instances`, {
                         headers: {
                             'Content-Type': 'application/json;charset=UTF-8',
                             'Access-Control-Allow-Origin': '*',
@@ -138,7 +138,7 @@ let NotesService = class NotesService {
                         console.log('Received instances from Orthanc: [3]');
                         const instanceIds = instanceRes?.data.map((instance) => instance.ID) ||
                             [];
-                        study.previewUrls = instanceIds.map((id) => `http://75.119.148.56:8042/instances/${id}/preview?format=jpg&height=100`);
+                        study.previewUrls = instanceIds.map((id) => `http://109.123.244.17:8042/instances/${id}/preview?format=jpg&height=100`);
                         return study;
                     })
                         .catch((error) => {
@@ -163,7 +163,7 @@ let NotesService = class NotesService {
     getOrthanicStudyByID(studyId) {
         console.log('Querying Orthanc for study ID:', studyId);
         return axios
-            .get(`http://75.119.148.56:8042/studies/${studyId}`, {
+            .get(`http://109.123.244.17:8042/studies/${studyId}`, {
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
                 'Access-Control-Allow-Origin': '*',
@@ -185,7 +185,7 @@ let NotesService = class NotesService {
         console.log('Uploading study to Orthanc:', studyFile);
         return;
         return axios
-            .post('http://75.119.148.56:8042/instances', studyFile, {
+            .post('http://109.123.244.17:8042/instances', studyFile, {
             headers: {
                 'Content-Type': 'application/zip',
                 'Access-Control-Allow-Origin': '*',

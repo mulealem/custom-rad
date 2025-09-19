@@ -9,7 +9,7 @@ export class OrthancService {
   constructor(private prisma: PrismaService) {}
 
   private orthancClient() {
-    const baseURL = process.env.ORTHANC_BASE_URL || 'http://75.119.148.56:8042';
+    const baseURL = process.env.ORTHANC_BASE_URL || 'http://109.123.244.17:8042';
     const username = process.env.ORTHANC_USERNAME;
     const password = process.env.ORTHANC_PASSWORD;
     return axios.create({
@@ -58,7 +58,7 @@ export class OrthancService {
     );
 
     // return axios
-    //   .post('http://75.119.148.56:8042/tools/find', {
+    //   .post('http://109.123.244.17:8042/tools/find', {
     //     Level: 'Instance',
     //     Query: {
     //       SOPInstanceUID: study.sopInstanceUID,
@@ -71,7 +71,7 @@ export class OrthancService {
     //     throw new Error('Failed to query Orthanc');
     //   });
 
-    const orthancUrl = 'http://75.119.148.56:8042';
+    const orthancUrl = 'http://109.123.244.17:8042';
 
     const client = axios.create({
       baseURL: orthancUrl,
@@ -452,11 +452,11 @@ export class OrthancService {
     );
 
     return axios
-      .post(`http://75.119.148.56:8042/tools/lookup`, study?.seriesInstanceUID)
+      .post(`http://109.123.244.17:8042/tools/lookup`, study?.seriesInstanceUID)
       .then((response) => {
         const seriesLookup = response.data;
         return axios
-          .post(`http://75.119.148.56:8042/tools/find`, {
+          .post(`http://109.123.244.17:8042/tools/find`, {
             Level: 'Study',
             Query: {},
             Expand: true,
@@ -497,7 +497,7 @@ export class OrthancService {
       // writeStream.end();
 
       // upload to Orthanc
-      const orthancUrl = 'http://75.119.148.56:8042/instances';
+      const orthancUrl = 'http://109.123.244.17:8042/instances';
       const response = await axios.post(orthancUrl, file.buffer, {
         headers: {
           'Content-Type': 'application/dicom',

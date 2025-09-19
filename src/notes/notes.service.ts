@@ -114,7 +114,7 @@ export class NotesService {
     // ];
     return axios
       .post(
-        'http://75.119.148.56:8042/tools/find',
+        'http://109.123.244.17:8042/tools/find',
         {
           Level: 'Study',
           Query: query,
@@ -134,7 +134,7 @@ export class NotesService {
         return Promise.all(
           response.data.map((study: any) => {
             return axios
-              .get(`http://75.119.148.56:8042/studies/${study.ID}/series`, {
+              .get(`http://109.123.244.17:8042/studies/${study.ID}/series`, {
                 // auth: { username: 'orthanc', password: 'orthanc' },
                 headers: {
                   'Content-Type': 'application/json;charset=UTF-8',
@@ -147,7 +147,7 @@ export class NotesService {
                 const seriesId = seriesRes?.data[0]?.ID;
                 return axios
                   .get(
-                    `http://75.119.148.56:8042/series/${seriesId}/instances`,
+                    `http://109.123.244.17:8042/series/${seriesId}/instances`,
                     {
                       // auth: { username: 'orthanc', password: 'orthanc' },
                       headers: {
@@ -164,7 +164,7 @@ export class NotesService {
                       [];
                     study.previewUrls = instanceIds.map(
                       (id: string) =>
-                        `http://75.119.148.56:8042/instances/${id}/preview?format=jpg&height=100`,
+                        `http://109.123.244.17:8042/instances/${id}/preview?format=jpg&height=100`,
                     );
                     return study;
                   })
@@ -199,7 +199,7 @@ export class NotesService {
   getOrthanicStudyByID(studyId: string): any {
     console.log('Querying Orthanc for study ID:', studyId);
     return axios
-      .get(`http://75.119.148.56:8042/studies/${studyId}`, {
+      .get(`http://109.123.244.17:8042/studies/${studyId}`, {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
           'Access-Control-Allow-Origin': '*',
@@ -223,7 +223,7 @@ export class NotesService {
 
     return;
     return axios
-      .post('http://75.119.148.56:8042/instances', studyFile, {
+      .post('http://109.123.244.17:8042/instances', studyFile, {
         headers: {
           'Content-Type': 'application/zip',
           'Access-Control-Allow-Origin': '*',

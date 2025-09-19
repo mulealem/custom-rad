@@ -6,36 +6,36 @@ export declare class StudyController {
     constructor(studyService: StudyService);
     create(createStudyDto: CreateStudyDto): import(".prisma/client").Prisma.Prisma__StudyClient<{
         id: number;
+        content: string | null;
+        userId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        userId: number | null;
-        content: string | null;
         studyId: string | null;
-        modality: string | null;
-        status: string | null;
+        parentStudyReferenceId: string | null;
+        studyDIACOMReferenceObject: string | null;
         patientId: number | null;
+        modality: string | null;
         referringPhysicianId: number | null;
         assignedDoctorId: number | null;
+        status: string | null;
         institutionId: number | null;
         uploadedById: number | null;
-        studyDIACOMReferenceObject: string | null;
-        parentStudyReferenceId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     search(query: any): import(".prisma/client").Prisma.PrismaPromise<({
         patient: {
-            name: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
+            name: string | null;
             dateOfBirth: Date | null;
             gender: string | null;
             createdById: number | null;
         } | null;
         institution: {
             id: number;
+            title: string | null;
             createdAt: Date;
             updatedAt: Date;
-            title: string | null;
             createdById: number | null;
             slung: string;
             abbreviation: string | null;
@@ -45,8 +45,8 @@ export declare class StudyController {
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            email: string;
             password: string;
+            email: string;
             fullName: string | null;
             phoneNumber: string | null;
             profilePicture: string | null;
@@ -54,36 +54,36 @@ export declare class StudyController {
         } | null;
     } & {
         id: number;
+        content: string | null;
+        userId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        userId: number | null;
-        content: string | null;
         studyId: string | null;
-        modality: string | null;
-        status: string | null;
+        parentStudyReferenceId: string | null;
+        studyDIACOMReferenceObject: string | null;
         patientId: number | null;
+        modality: string | null;
         referringPhysicianId: number | null;
         assignedDoctorId: number | null;
+        status: string | null;
         institutionId: number | null;
         uploadedById: number | null;
-        studyDIACOMReferenceObject: string | null;
-        parentStudyReferenceId: string | null;
     })[]>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<({
         patient: {
-            name: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
+            name: string | null;
             dateOfBirth: Date | null;
             gender: string | null;
             createdById: number | null;
         } | null;
         institution: {
             id: number;
+            title: string | null;
             createdAt: Date;
             updatedAt: Date;
-            title: string | null;
             createdById: number | null;
             slung: string;
             abbreviation: string | null;
@@ -93,8 +93,8 @@ export declare class StudyController {
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            email: string;
             password: string;
+            email: string;
             fullName: string | null;
             phoneNumber: string | null;
             profilePicture: string | null;
@@ -102,36 +102,36 @@ export declare class StudyController {
         } | null;
     } & {
         id: number;
+        content: string | null;
+        userId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        userId: number | null;
-        content: string | null;
         studyId: string | null;
-        modality: string | null;
-        status: string | null;
+        parentStudyReferenceId: string | null;
+        studyDIACOMReferenceObject: string | null;
         patientId: number | null;
+        modality: string | null;
         referringPhysicianId: number | null;
         assignedDoctorId: number | null;
+        status: string | null;
         institutionId: number | null;
         uploadedById: number | null;
-        studyDIACOMReferenceObject: string | null;
-        parentStudyReferenceId: string | null;
     })[]>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__StudyClient<({
         patient: {
-            name: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
+            name: string | null;
             dateOfBirth: Date | null;
             gender: string | null;
             createdById: number | null;
         } | null;
         institution: {
             id: number;
+            title: string | null;
             createdAt: Date;
             updatedAt: Date;
-            title: string | null;
             createdById: number | null;
             slung: string;
             abbreviation: string | null;
@@ -141,8 +141,8 @@ export declare class StudyController {
             id: number;
             createdAt: Date;
             updatedAt: Date;
-            email: string;
             password: string;
+            email: string;
             fullName: string | null;
             phoneNumber: string | null;
             profilePicture: string | null;
@@ -150,38 +150,38 @@ export declare class StudyController {
         } | null;
     } & {
         id: number;
+        content: string | null;
+        userId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        userId: number | null;
-        content: string | null;
         studyId: string | null;
-        modality: string | null;
-        status: string | null;
+        parentStudyReferenceId: string | null;
+        studyDIACOMReferenceObject: string | null;
         patientId: number | null;
+        modality: string | null;
         referringPhysicianId: number | null;
         assignedDoctorId: number | null;
+        status: string | null;
         institutionId: number | null;
         uploadedById: number | null;
-        studyDIACOMReferenceObject: string | null;
-        parentStudyReferenceId: string | null;
     }) | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     assignDoctor(studyIds: number[], doctorId: number): import(".prisma/client").Prisma.PrismaPromise<import(".prisma/client").Prisma.BatchPayload>;
     update(id: string, updateStudyDto: UpdateStudyDto): import(".prisma/client").Prisma.Prisma__StudyClient<{
         id: number;
+        content: string | null;
+        userId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        userId: number | null;
-        content: string | null;
         studyId: string | null;
-        modality: string | null;
-        status: string | null;
+        parentStudyReferenceId: string | null;
+        studyDIACOMReferenceObject: string | null;
         patientId: number | null;
+        modality: string | null;
         referringPhysicianId: number | null;
         assignedDoctorId: number | null;
+        status: string | null;
         institutionId: number | null;
         uploadedById: number | null;
-        studyDIACOMReferenceObject: string | null;
-        parentStudyReferenceId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     publish(id: string, html: string): Promise<{
         ok: boolean;
