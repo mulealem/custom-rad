@@ -6,12 +6,12 @@ import { PrismaService } from '../prisma.service';
 @Injectable()
 export class CategoryService {
   constructor(private prisma: PrismaService) {}
-  create(createCategoryDto: CreateCategoryDto) {
+  create(createCategoryDto: CreateCategoryDto & { createdById?: number }) {
     return this.prisma.category.create({ data: createCategoryDto });
   }
 
-  findAll() {
-    return this.prisma.category.findMany();
+  findAll(createdById: number) {
+    return this.prisma.category.findMany({ where: { createdById } });
   }
 
   findOne(id: number) {
@@ -34,6 +34,9 @@ export class CategoryService {
     const where: any = {};
     if (filters.Ids) {
       where.id = { in: filters.Ids };
+    }
+    if (filters.createdByIds) {
+      where.createdById = { in: filters.createdByIds };
     }
     if (filters.title)
       where.title = { contains: filters.title, mode: 'insensitive' };

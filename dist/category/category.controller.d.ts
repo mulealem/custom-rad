@@ -1,10 +1,16 @@
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { Request as ExpressRequest } from 'express';
+type AuthRequest = ExpressRequest & {
+    user?: {
+        userId?: number;
+    };
+};
 export declare class CategoryController {
     private readonly categoryService;
     constructor(categoryService: CategoryService);
-    create(createCategoryDto: CreateCategoryDto): import(".prisma/client").Prisma.Prisma__CategoryClient<{
+    create(createCategoryDto: CreateCategoryDto, req: AuthRequest): import(".prisma/client").Prisma.Prisma__CategoryClient<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -13,7 +19,7 @@ export declare class CategoryController {
         abbreviation: string | null;
         departmentId: number;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    findAll(): import(".prisma/client").Prisma.PrismaPromise<{
+    findAll(req: AuthRequest): import(".prisma/client").Prisma.PrismaPromise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -49,7 +55,7 @@ export declare class CategoryController {
         abbreviation: string | null;
         departmentId: number;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    search(filters: any): Promise<{
+    search(filters: any, req: AuthRequest): Promise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -59,3 +65,4 @@ export declare class CategoryController {
         departmentId: number;
     }[]>;
 }
+export {};

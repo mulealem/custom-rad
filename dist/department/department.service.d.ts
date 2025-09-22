@@ -4,7 +4,9 @@ import { PrismaService } from '../prisma.service';
 export declare class DepartmentService {
     private prisma;
     constructor(prisma: PrismaService);
-    create(createDepartmentDto: CreateDepartmentDto): import(".prisma/client").Prisma.Prisma__DepartmentClient<{
+    create(createDepartmentDto: CreateDepartmentDto & {
+        createdById?: number;
+    }): import(".prisma/client").Prisma.Prisma__DepartmentClient<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -13,7 +15,7 @@ export declare class DepartmentService {
         abbreviation: string | null;
         description: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    findAll(): import(".prisma/client").Prisma.PrismaPromise<{
+    findAll(createdById: number): import(".prisma/client").Prisma.PrismaPromise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;

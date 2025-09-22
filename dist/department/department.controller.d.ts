@@ -1,10 +1,16 @@
 import { DepartmentService } from './department.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
+import { Request as ExpressRequest } from 'express';
+type AuthRequest = ExpressRequest & {
+    user?: {
+        userId?: number;
+    };
+};
 export declare class DepartmentController {
     private readonly departmentService;
     constructor(departmentService: DepartmentService);
-    create(createDepartmentDto: CreateDepartmentDto): import(".prisma/client").Prisma.Prisma__DepartmentClient<{
+    create(createDepartmentDto: CreateDepartmentDto, req: AuthRequest): import(".prisma/client").Prisma.Prisma__DepartmentClient<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -13,7 +19,7 @@ export declare class DepartmentController {
         abbreviation: string | null;
         description: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    findAll(): import(".prisma/client").Prisma.PrismaPromise<{
+    findAll(req: AuthRequest): import(".prisma/client").Prisma.PrismaPromise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -49,7 +55,7 @@ export declare class DepartmentController {
         abbreviation: string | null;
         description: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    search(filters: any): Promise<{
+    search(filters: any, req: AuthRequest): Promise<{
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -59,3 +65,4 @@ export declare class DepartmentController {
         description: string | null;
     }[]>;
 }
+export {};

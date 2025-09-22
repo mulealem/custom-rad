@@ -17,16 +17,26 @@ const common_1 = require("@nestjs/common");
 const category_service_1 = require("./category.service");
 const create_category_dto_1 = require("./dto/create-category.dto");
 const update_category_dto_1 = require("./dto/update-category.dto");
+const passport_1 = require("@nestjs/passport");
+const common_2 = require("@nestjs/common");
 let CategoryController = class CategoryController {
     categoryService;
     constructor(categoryService) {
         this.categoryService = categoryService;
     }
-    create(createCategoryDto) {
-        return this.categoryService.create(createCategoryDto);
+    create(createCategoryDto, req) {
+        const raw = req.user?.userId;
+        const userId = typeof raw === 'string' ? parseInt(raw, 10) : Number(raw);
+        if (!Number.isFinite(userId))
+            throw new common_2.UnauthorizedException('Invalid user');
+        return this.categoryService.create({ ...createCategoryDto, createdById: userId });
     }
-    findAll() {
-        return this.categoryService.findAll();
+    findAll(req) {
+        const raw = req.user?.userId;
+        const userId = typeof raw === 'string' ? parseInt(raw, 10) : Number(raw);
+        if (!Number.isFinite(userId))
+            throw new common_2.UnauthorizedException('Invalid user');
+        return this.categoryService.findAll(userId);
     }
     findOne(id) {
         return this.categoryService.findOne(+id);
@@ -37,22 +47,31 @@ let CategoryController = class CategoryController {
     remove(id) {
         return this.categoryService.remove(+id);
     }
-    search(filters) {
-        return this.categoryService.search(filters);
+    search(filters, req) {
+        const raw = req.user?.userId;
+        const userId = typeof raw === 'string' ? parseInt(raw, 10) : Number(raw);
+        if (!Number.isFinite(userId))
+            throw new common_2.UnauthorizedException('Invalid user');
+        const scoped = { ...filters };
+        if (!scoped.createdByIds)
+            scoped.createdByIds = [userId];
+        return this.categoryService.search(scoped);
     }
 };
 exports.CategoryController = CategoryController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_category_dto_1.CreateCategoryDto]),
+    __metadata("design:paramtypes", [create_category_dto_1.CreateCategoryDto, Object]),
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "findAll", null);
 __decorate([
@@ -80,11 +99,13 @@ __decorate([
 __decorate([
     (0, common_1.Post)('search'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], CategoryController.prototype, "search", null);
 exports.CategoryController = CategoryController = __decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])
 ], CategoryController);

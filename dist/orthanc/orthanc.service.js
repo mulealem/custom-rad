@@ -53,11 +53,11 @@ let OrthancService = class OrthancService {
         else {
             std = study;
         }
-        console.log('Extracting DICOM info for SeriesInstanceUID [std json]:', std.seriesInstanceUID);
         const orthancUrl = 'http://109.123.244.17:8042';
         const client = axios_1.default.create({
             baseURL: orthancUrl,
         });
+        console.log('> extract: Received extract request', study, typeof study, tempStudy, typeof tempStudy);
         const seriesInstanceUID = study?.seriesInstanceUID;
         console.log('Extracting DICOM info for SeriesInstanceUID [main]:', seriesInstanceUID);
         return (client

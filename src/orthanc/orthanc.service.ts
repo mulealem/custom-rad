@@ -52,10 +52,11 @@ export class OrthancService {
       std = study;
     }
 
-    console.log(
-      'Extracting DICOM info for SeriesInstanceUID [std json]:',
-      std.seriesInstanceUID,
-    );
+    // console.log(
+    //   'Extracting DICOM info for SeriesInstanceUID [std json]:',
+    //   std,
+    //   std.seriesInstanceUID,
+    // );
 
     // return axios
     //   .post('http://109.123.244.17:8042/tools/find', {
@@ -77,6 +78,8 @@ export class OrthancService {
       baseURL: orthancUrl,
       // headers: { 'Content-Type': 'application/json' },
     });
+
+    console.log('> extract: Received extract request', study, typeof study, tempStudy, typeof tempStudy);
 
     const seriesInstanceUID = study?.seriesInstanceUID;
 

@@ -20,8 +20,8 @@ let CategoryService = class CategoryService {
     create(createCategoryDto) {
         return this.prisma.category.create({ data: createCategoryDto });
     }
-    findAll() {
-        return this.prisma.category.findMany();
+    findAll(createdById) {
+        return this.prisma.category.findMany({ where: { createdById } });
     }
     findOne(id) {
         return this.prisma.category.findUnique({ where: { id } });
@@ -39,6 +39,9 @@ let CategoryService = class CategoryService {
         const where = {};
         if (filters.Ids) {
             where.id = { in: filters.Ids };
+        }
+        if (filters.createdByIds) {
+            where.createdById = { in: filters.createdByIds };
         }
         if (filters.title)
             where.title = { contains: filters.title, mode: 'insensitive' };

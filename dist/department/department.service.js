@@ -20,8 +20,8 @@ let DepartmentService = class DepartmentService {
     create(createDepartmentDto) {
         return this.prisma.department.create({ data: createDepartmentDto });
     }
-    findAll() {
-        return this.prisma.department.findMany();
+    findAll(createdById) {
+        return this.prisma.department.findMany({ where: { createdById } });
     }
     findOne(id) {
         return this.prisma.department.findUnique({ where: { id } });
@@ -39,6 +39,10 @@ let DepartmentService = class DepartmentService {
         const where = {};
         if (filters.Ids) {
             where.id = { in: filters.Ids };
+        }
+        console.log('Search filters:: ', filters);
+        if (filters.createdByIds) {
+            where.createdById = { in: filters.createdByIds };
         }
         if (filters.title)
             where.title = { contains: filters.title, mode: 'insensitive' };

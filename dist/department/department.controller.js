@@ -17,16 +17,26 @@ const common_1 = require("@nestjs/common");
 const department_service_1 = require("./department.service");
 const create_department_dto_1 = require("./dto/create-department.dto");
 const update_department_dto_1 = require("./dto/update-department.dto");
+const passport_1 = require("@nestjs/passport");
+const common_2 = require("@nestjs/common");
 let DepartmentController = class DepartmentController {
     departmentService;
     constructor(departmentService) {
         this.departmentService = departmentService;
     }
-    create(createDepartmentDto) {
-        return this.departmentService.create(createDepartmentDto);
+    create(createDepartmentDto, req) {
+        const raw = req.user?.userId;
+        const userId = typeof raw === 'string' ? parseInt(raw, 10) : Number(raw);
+        if (!Number.isFinite(userId))
+            throw new common_2.UnauthorizedException('Invalid user');
+        return this.departmentService.create({ ...createDepartmentDto, createdById: userId });
     }
-    findAll() {
-        return this.departmentService.findAll();
+    findAll(req) {
+        const raw = req.user?.userId;
+        const userId = typeof raw === 'string' ? parseInt(raw, 10) : Number(raw);
+        if (!Number.isFinite(userId))
+            throw new common_2.UnauthorizedException('Invalid user');
+        return this.departmentService.findAll(userId);
     }
     findOne(id) {
         return this.departmentService.findOne(+id);
@@ -37,22 +47,31 @@ let DepartmentController = class DepartmentController {
     remove(id) {
         return this.departmentService.remove(+id);
     }
-    search(filters) {
-        return this.departmentService.search(filters);
+    search(filters, req) {
+        const raw = req.user?.userId;
+        const userId = typeof raw === 'string' ? parseInt(raw, 10) : Number(raw);
+        if (!Number.isFinite(userId))
+            throw new common_2.UnauthorizedException('Invalid user');
+        const scoped = { ...filters };
+        if (!scoped.createdByIds)
+            scoped.createdByIds = [userId];
+        return this.departmentService.search(scoped);
     }
 };
 exports.DepartmentController = DepartmentController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_department_dto_1.CreateDepartmentDto]),
+    __metadata("design:paramtypes", [create_department_dto_1.CreateDepartmentDto, Object]),
     __metadata("design:returntype", void 0)
 ], DepartmentController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], DepartmentController.prototype, "findAll", null);
 __decorate([
@@ -80,11 +99,13 @@ __decorate([
 __decorate([
     (0, common_1.Post)('search'),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], DepartmentController.prototype, "search", null);
 exports.DepartmentController = DepartmentController = __decorate([
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
     (0, common_1.Controller)('departments'),
     __metadata("design:paramtypes", [department_service_1.DepartmentService])
 ], DepartmentController);
