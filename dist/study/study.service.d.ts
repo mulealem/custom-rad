@@ -203,7 +203,7 @@ export declare class StudyService {
     private buildReportHTML;
     private buildHeaderTemplate;
     private buildFooterTemplate;
-    publish(id: number, html?: string): Promise<{
+    publish(id: number, html?: string, publisher?: any): Promise<{
         ok: boolean;
         attachmentId: number;
         fileName: string;

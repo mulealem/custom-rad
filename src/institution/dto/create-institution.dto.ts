@@ -3,7 +3,9 @@ import { IsOptional, IsString, MinLength } from 'class-validator';
 // model Institution {
 //   id           Int      @id @default(autoincrement())
 //   title        String?
+//   slung        String   @unique @default(cuid())
 //   abbreviation String?
+//   logo         String?
 //   createdById  Int?
 //   createdBy    User?    @relation(fields: [createdById], references: [id])
 //   createdAt    DateTime @default(now())
@@ -18,5 +20,13 @@ export class CreateInstitutionDto {
 
   @IsString()
   @IsOptional()
+  slung?: string;
+
+  @IsString()
+  @IsOptional()
   abbreviation?: string;
+
+  @IsString()
+  @IsOptional()
+  logo?: string;
 }

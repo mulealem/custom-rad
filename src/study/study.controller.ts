@@ -6,10 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { StudyService } from './study.service';
 import { CreateStudyDto } from './dto/create-study.dto';
 import { UpdateStudyDto } from './dto/update-study.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('studies')
 export class StudyController {
@@ -49,11 +53,14 @@ export class StudyController {
   }
 
   @Post(':id/publish')
+  @UseGuards(JwtAuthGuard)
   publish(
     @Param('id') id: string,
     @Body('html') html: string,
+    @Req() req: Request,
   ) {
-    return this.studyService.publish(+id, html);
+    console.log("req.user: ", req.user);
+    return this.studyService.publish(+id, html, req.user);
   }
 
   @Delete(':id')

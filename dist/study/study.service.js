@@ -163,7 +163,8 @@ let StudyService = StudyService_1 = class StudyService {
         }
         const institution = study.institution || {};
         const patient = study.patient || {};
-        const doctor = study.assignedDoctor || study.uploadedBy || {};
+        const doctor = options.publisher || study.assignedDoctor || study.uploadedBy || {};
+        console.log(doctor, options.publisher, study.assignedDoctor, study.uploadedBy);
         const logoUrl = institution.logo ? institution.logo : '';
         const institutionName = institution.title || 'Institution';
         const appName = 'Radet Teleradiology';
@@ -244,14 +245,15 @@ let StudyService = StudyService_1 = class StudyService {
         <div style="font-size:8px;">Page <span class="pageNumber"></span> / <span class="totalPages"></span></div>
       </div>`;
     }
-    async publish(id, html) {
+    async publish(id, html, publisher) {
         const study = await this.prisma.study.findUnique({
             where: { id },
             include: { patient: true, institution: true, assignedDoctor: true, uploadedBy: true },
         });
         if (!study)
             throw new Error('Study not found');
-        const htmlContent = this.buildReportHTML(study, { bodyHtml: html });
+        const publisherUser = publisher ? await this.prisma.user.findUnique({ where: { id: +publisher.userId } }) : null;
+        const htmlContent = this.buildReportHTML(study, { bodyHtml: html, publisher: publisherUser });
         const pdfBuffer = await this.pdfService.generatePdfFromHtml(htmlContent, {
             headerTemplate: this.buildHeaderTemplate(study),
             footerTemplate: this.buildFooterTemplate(study),
@@ -272,7 +274,7 @@ let StudyService = StudyService_1 = class StudyService {
                 filePath: publicPath,
                 fileType: 'application/pdf',
                 fileSize: pdfBuffer.length,
-                createdById: study.uploadedById ?? null,
+                createdById: publisherUser?.id ?? study.uploadedById ?? null,
             },
         });
         await this.prisma.study.update({

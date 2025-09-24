@@ -13,7 +13,9 @@ exports.CreateInstitutionDto = void 0;
 const class_validator_1 = require("class-validator");
 class CreateInstitutionDto {
     title;
+    slung;
     abbreviation;
+    logo;
 }
 exports.CreateInstitutionDto = CreateInstitutionDto;
 __decorate([
@@ -25,5 +27,15 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
+], CreateInstitutionDto.prototype, "slung", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
 ], CreateInstitutionDto.prototype, "abbreviation", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateInstitutionDto.prototype, "logo", void 0);
 //# sourceMappingURL=create-institution.dto.js.map

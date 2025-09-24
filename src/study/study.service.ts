@@ -163,7 +163,7 @@ export class StudyService {
     };
   }
 
-  private buildReportHTML(study: any, options: { bodyHtml?: string } = {}) {
+  private buildReportHTML(study: any, options: { bodyHtml?: string, publisher?: any } = {}) {
     // If caller passed a complete HTML document, trust it (legacy behavior)
     if (options.bodyHtml && /<html[\s>]/i.test(options.bodyHtml)) {
       return options.bodyHtml;
@@ -171,7 +171,8 @@ export class StudyService {
 
     const institution = study.institution || {};
     const patient = study.patient || {};
-    const doctor = study.assignedDoctor || study.uploadedBy || {};
+    const doctor = options.publisher || study.assignedDoctor || study.uploadedBy || {};
+    console.log(doctor, options.publisher, study.assignedDoctor, study.uploadedBy);
 
     const logoUrl = institution.logo ? institution.logo : '';
     const institutionName = institution.title || 'Institution';
@@ -257,15 +258,15 @@ export class StudyService {
       </div>`;
   }
 
-  async publish(id: number, html?: string) {
+  async publish(id: number, html?: string, publisher?: any) {
     const study = await this.prisma.study.findUnique({
       where: { id },
       include: { patient: true, institution: true, assignedDoctor: true, uploadedBy: true },
     });
     if (!study) throw new Error('Study not found');
-  const htmlContent = this.buildReportHTML(study, { bodyHtml: html });
 
-    const pdfBuffer = await this.pdfService.generatePdfFromHtml(htmlContent, {
+    const publisherUser = publisher ? await this.prisma.user.findUnique({ where: { id: +publisher.userId } }) : null;
+    const htmlContent = this.buildReportHTML(study, { bodyHtml: html, publisher: publisherUser });    const pdfBuffer = await this.pdfService.generatePdfFromHtml(htmlContent, {
       headerTemplate: this.buildHeaderTemplate(study),
       footerTemplate: this.buildFooterTemplate(study),
       displayHeaderFooter: true,
@@ -288,7 +289,7 @@ export class StudyService {
         filePath: publicPath,
         fileType: 'application/pdf',
         fileSize: pdfBuffer.length,
-        createdById: study.uploadedById ?? null,
+        createdById: publisherUser?.id ?? study.uploadedById ?? null,
       },
     });
 

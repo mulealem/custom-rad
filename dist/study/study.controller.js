@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const study_service_1 = require("./study.service");
 const create_study_dto_1 = require("./dto/create-study.dto");
 const update_study_dto_1 = require("./dto/update-study.dto");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 let StudyController = class StudyController {
     studyService;
     constructor(studyService) {
@@ -40,8 +41,9 @@ let StudyController = class StudyController {
     update(id, updateStudyDto) {
         return this.studyService.update(+id, updateStudyDto);
     }
-    publish(id, html) {
-        return this.studyService.publish(+id, html);
+    publish(id, html, req) {
+        console.log("req.user: ", req.user);
+        return this.studyService.publish(+id, html, req.user);
     }
     remove(id) {
         return this.studyService.remove(+id);
@@ -93,10 +95,12 @@ __decorate([
 ], StudyController.prototype, "update", null);
 __decorate([
     (0, common_1.Post)(':id/publish'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)('html')),
+    __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String, String, Object]),
     __metadata("design:returntype", void 0)
 ], StudyController.prototype, "publish", null);
 __decorate([

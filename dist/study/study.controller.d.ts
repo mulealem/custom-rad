@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import { StudyService } from './study.service';
 import { CreateStudyDto } from './dto/create-study.dto';
 import { UpdateStudyDto } from './dto/update-study.dto';
@@ -183,7 +184,7 @@ export declare class StudyController {
         studyDIACOMReferenceObject: string | null;
         parentStudyReferenceId: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    publish(id: string, html: string): Promise<{
+    publish(id: string, html: string, req: Request): Promise<{
         ok: boolean;
         attachmentId: number;
         fileName: string;
