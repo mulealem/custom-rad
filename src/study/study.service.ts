@@ -172,7 +172,6 @@ export class StudyService {
     const institution = study.institution || {};
     const patient = study.patient || {};
     const doctor = options.publisher || study.assignedDoctor || study.uploadedBy || {};
-    console.log(doctor, options.publisher, study.assignedDoctor, study.uploadedBy);
 
     const logoUrl = institution.logo ? institution.logo : '';
     const institutionName = institution.title || 'Institution';
@@ -182,56 +181,68 @@ export class StudyService {
     const status = study.status || 'N/A';
     const createdAt = new Date(study.createdAt).toLocaleString();
     const updatedAt = new Date(study.updatedAt).toLocaleString();
-  const patientName = patient.name || 'N/A';
-  const patientGender = patient.gender || 'N/A';
-  const patientDOB = patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString() : 'N/A';
-  const age = patient.dateOfBirth ? Math.floor((Date.now() - new Date(patient.dateOfBirth).getTime()) / (365.25*24*60*60*1000)) : 'N/A';
+    const patientName = patient.name || 'N/A';
+    const patientGender = patient.gender || 'N/A';
+    const patientDOB = patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString() : 'N/A';
+    const age = patient.dateOfBirth ? Math.floor((Date.now() - new Date(patient.dateOfBirth).getTime()) / (365.25*24*60*60*1000)) : 'N/A';
     const doctorName = doctor.fullName || 'Doctor';
-  const reportContent = options.bodyHtml || study.content || '<p>No report content</p>';
+    const reportContent = options.bodyHtml || study.content || '<p>No report content</p>';
 
-    return `<!DOCTYPE html><html><head><meta charset="utf-8" />
-    <style>
-      body { font-family: Arial, sans-serif; font-size: 11pt; color:#222; }
-      h1,h2,h3 { margin:0; }
-      .report-container { width:100%; }
-      .section { margin-top:14px; }
-      .section-title { font-size:12pt; font-weight:bold; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px; }
-      table.meta { width:100%; border-collapse: collapse; font-size:10pt; }
-      table.meta td { padding:4px 6px; vertical-align: top; }
-      table.meta tr:nth-child(even){ background:#f7f7f7; }
-      .label { font-weight:bold; white-space:nowrap; }
-      .divider { border-top:1px solid #999; margin:18px 0 10px; }
-      .content { line-height:1.4; }
-      .signature-block { margin-top:30px; font-size:10pt; }
-      .watermark { position: fixed; top: 45%; left: 20%; opacity:0.05; font-size:72pt; transform:rotate(-30deg); pointer-events:none; }
-    </style></head><body>
-      <div class="report-container">
-        <div class="section">
-          <div class="section-title">Patient Information</div>
-          <table class="meta">
-            <tr><td class="label">Name</td><td>${patientName}</td><td class="label">Gender</td><td>${patientGender}</td></tr>
-            <tr><td class="label">Date of Birth</td><td>${patientDOB}</td><td class="label">Age</td><td>${age}</td></tr>
-            <tr><td class="label">Study ID</td><td>${studyId}</td><td class="label">Modality</td><td>${modality}</td></tr>
-          </table>
-        </div>
-        <div class="section">
-          <div class="section-title">Report</div>
-          <div class="content">${reportContent}</div>
-        </div>
-        <div class="section">
-          <div class="section-title">Impression / Conclusion</div>
-          <div class="content"><em>(Add impression here if separated from body)</em></div>
-        </div>
-        <div class="signature-block">
-          <div class="divider"></div>
-          <div>Signed By: <strong>${doctorName}</strong></div>
-          <div>Status: ${status}</div>
-          <div>Created: ${createdAt}</div>
-          <div>Last Updated: ${updatedAt}</div>
-        </div>
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    .container { width: 100%; max-width: 48rem; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+    .header { width: 100%; height: 10rem; flex: none; padding: 0.75rem; }
+    .header img { width: 100%; height: 100%; object-fit: cover; }
+    .info { width: 100%; display: flex; flex-direction: column; font-size: 0.875rem; line-height: 1.25rem; padding-left: 0.75rem; padding-right: 0.75rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .row { width: 100%; display: flex; flex-direction: row; }
+    .label { width: 11rem; flex: none; }
+    .content-area { width: 100%; height: 100%; padding-left: 0.75rem; padding-right: 0.75rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .footer { width: 100%; padding-left: 0.75rem; padding-right: 0.75rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .footer-content { display: flex; flex-direction: row; align-items: center; gap: 0.75rem; }
+    .footer-icon { width: 2rem; height: 2rem; color: #9ca3af; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="${logoUrl}" alt="institution logo" />
+    </div>
+    <div class="info">
+      <div class="row">
+        <div class="label">Patient</div>
+        <div>${patientName}, ${age} Yrs, ${patientGender}</div>
       </div>
-      <div class="watermark">${institutionName}</div>
-    </body></html>`;
+      <div class="row">
+        <div class="label">Study</div>
+        <div>${modality}</div>
+      </div>
+      <div class="row">
+        <div class="label">Published By</div>
+        <div>${doctorName}</div>
+      </div>
+      <div class="row">
+        <div class="label">Content Date & Time</div>
+        <div>${updatedAt}</div>
+      </div>
+    </div>
+    <div class="content-area">
+      ${reportContent}
+    </div>
+    <div class="footer">
+      <div class="footer-content">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="footer-icon">
+          <path d="M19 3H5C3.89 3 3 3.89 3 5V19C3 20.11 3.89 21 5 21H19C20.11 21 21 20.11 21 19V5C21 3.89 20.11 3 19 3M17.1 13H13V14H17C17 14 16.94 17 15.5 17C14.15 17 14.5 15.47 13 15V17C13 17 12.55 18 12 18S11 17.55 11 17V15C9.5 15.47 9.85 17 8.5 17C7.06 17 7 14 7 14H11V13H6.9C6.85 12.69 6.84 12.35 6.8 12H11V11H6.81C6.83 10.67 6.91 10.33 7 10H11V9H7.34C7.5 8.65 7.65 8.31 7.83 8H11V7C11 6.45 11.45 6 12 6S13 6.45 13 7V8H16.17C16.35 8.31 16.5 8.65 16.66 9H13V10H17C17.1 10.33 17.17 10.67 17.19 11H13V12H17.2C17.16 12.35 17.15 12.69 17.1 13Z" />
+        </svg>
+        <div>Tele-rad Group</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
   }
 
   private buildHeaderTemplate(study: any) {
@@ -267,9 +278,7 @@ export class StudyService {
 
     const publisherUser = publisher ? await this.prisma.user.findUnique({ where: { id: +publisher.userId } }) : null;
     const htmlContent = this.buildReportHTML(study, { bodyHtml: html, publisher: publisherUser });    const pdfBuffer = await this.pdfService.generatePdfFromHtml(htmlContent, {
-      headerTemplate: this.buildHeaderTemplate(study),
-      footerTemplate: this.buildFooterTemplate(study),
-      displayHeaderFooter: true,
+      displayHeaderFooter: false,
     });
 
   const uploadsDir = join(process.cwd(), 'uploads');
